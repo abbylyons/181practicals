@@ -3,9 +3,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
+from rdkit import Chem
+from rdkit.Chem import ChemicalFeatures
+from rdkit import RDConfig
+import os
 from sklearn import cross_validation
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, ElasticNetCV, LassoLarsCV
+
+fdefName = os.path.join(RDConfig.RDDataDir,’BaseFeatures.fdef’)
+factory = ChemicalFeatures.BuildFeatureFactory(fdefName)
 
 df_train = pd.read_csv("train.csv")
 df_test = pd.read_csv("test.csv")
@@ -16,18 +22,21 @@ def write_to_file(filename, predictions):
         for i,p in enumerate(predictions):
             f.write(str(i+1) + "," + str(p) + "\n")
 
+def getfeat(smile_array):
+
+    feats = []
+    for smile in smile_array:
+        m = Chem.MolFromSmiles(smile)
+        feats.append(factory.GetFeaturesForMol(m))
+    return np.vstack(feats)
+
 print("Loading data :)")
 #store gap values
 Y_train = df_train.gap.values
-#delete 'Id' column
-df_test = df_test.drop(['Id'], axis=1)
-#delete 'gap' column
-df_train = df_train.drop(['gap'], axis=1)
-X_test = np.vstack(df_test.drop(['smiles'], axis=1).values)
-
-df_train = df_train.drop(['smiles'], axis=1)
-base_X = np.vstack(df_train.values)
+X_test = getfeat(df_test.smiles.values)
+base_X = getfeat(df_train.smiles.values)
 base_Y = np.vstack(Y_train)
+
 
 def ridgereg(a):
     print("Doing ridge regression")

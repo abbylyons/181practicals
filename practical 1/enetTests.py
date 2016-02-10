@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, lasso_path, enet_path
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, LassoLarsCV
 
 df_train = pd.read_csv("train.csv")
 df_test = pd.read_csv("test.csv")
@@ -36,7 +36,6 @@ print "Score = %f" % clf.score(base_X, base_Y)
 clf_pred = clf.predict(X_test)
 write_to_file("ridge.csv", clf_pred)
 
-
 print ("Doing lasso regression")
 clf2 = Lasso(alpha=1e-4)
 clf2.fit(base_X, base_Y)
@@ -50,6 +49,13 @@ clf3.fit(base_X, base_Y)
 print "Score = %f" % clf3.score(base_X, base_Y)
 clf3_pred = clf3.predict(X_test)
 write_to_file("elastic.csv", clf3_pred)
+
+print ("Doing cross-validated LassoLars")
+clf4 = LassoLarsCV()
+clf4.fit(base_X, base_Y)
+print "Score = %f" % clf4.score(base_X, base_Y)
+clf4_pred = clf4.predict(X_test)
+write_to_file("lassolars.csv", clf4_pred)
 
 # LASSO/ENET PATH CALCULATIONS
 # Not sure how to make predictions with this...

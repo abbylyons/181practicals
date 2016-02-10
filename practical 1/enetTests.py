@@ -4,7 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, LassoLarsCV
+from sklearn import cross_validation
+from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, ElasticNetCV, LassoLarsCV
 
 df_train = pd.read_csv("train.csv")
 df_test = pd.read_csv("test.csv")
@@ -15,47 +16,63 @@ def write_to_file(filename, predictions):
         for i,p in enumerate(predictions):
             f.write(str(i+1) + "," + str(p) + "\n")
 
-print("Loading data")
+print("Loading data :)")
 #store gap values
 Y_train = df_train.gap.values
 #delete 'Id' column
 df_test = df_test.drop(['Id'], axis=1)
 #delete 'gap' column
 df_train = df_train.drop(['gap'], axis=1)
-df_train = df_train
 X_test = np.vstack(df_test.drop(['smiles'], axis=1).values)
 
 df_train = df_train.drop(['smiles'], axis=1)
 base_X = np.vstack(df_train.values)
 base_Y = np.vstack(Y_train)
 
-print("Doing ridge regression")
-clf = Ridge(alpha=1.0)
-clf.fit(base_X, base_Y)
-print "Score = %f" % clf.score(base_X, base_Y)
-clf_pred = clf.predict(X_test)
-write_to_file("ridge.csv", clf_pred)
+def ridgereg(a):
+    print("Doing ridge regression")
+    clf = Ridge(alpha=a)
+    clf.fit(base_X, base_Y)
+    print ("Score = %f" % clf.score(base_X, base_Y))
+    clf_pred = clf.predict(X_test)
+    write_to_file("ridge.csv", clf_pred)
 
-print ("Doing lasso regression")
-clf2 = Lasso(alpha=1e-4)
-clf2.fit(base_X, base_Y)
-print "Score = %f" % clf2.score(base_X, base_Y)
-clf2_pred = clf2.predict(X_test)
-write_to_file("lasso.csv", clf2_pred)
+def lassoreg(a):
+    print ("Doing lasso regression")
+    clf2 = Lasso(alpha=a)
+    clf2.fit(base_X, base_Y)
+    print ("Score = %f" % clf2.score(base_X, base_Y))
+    clf2_pred = clf2.predict(X_test)
+    write_to_file("lasso.csv", clf2_pred)
 
-print ("Doing elastic net")
-clf3 = ElasticNet(alpha=1e-4)
-clf3.fit(base_X, base_Y)
-print "Score = %f" % clf3.score(base_X, base_Y)
-clf3_pred = clf3.predict(X_test)
-write_to_file("elastic.csv", clf3_pred)
+def enet(a):
+    print ("Doing elastic net")
+    clf3 = ElasticNet(alpha=a)
+    clf3.fit(base_X, base_Y)
+    print ("Score = %f" % clf3.score(base_X, base_Y))
+    clf3_pred = clf3.predict(X_test)
+    write_to_file("elastic.csv", clf3_pred)
 
-print ("Doing cross-validated LassoLars")
-clf4 = LassoLarsCV()
-clf4.fit(base_X, base_Y)
-print "Score = %f" % clf4.score(base_X, base_Y)
-clf4_pred = clf4.predict(X_test)
-write_to_file("lassolars.csv", clf4_pred)
+def enetCV():
+    print ("Doing elastic net")
+    cross_val = cross_validation.ShuffleSplit(len(base_X), n_iter=5, test_size=0.2, random_state=0)
+    clf4 = ElasticNetCV(cv=cross_val)
+    clf4.fit(base_X, base_Y)
+    print ("Score = %f" % clf4.score(base_X, base_Y))
+    clf4_pred = clf4.predict(X_test)
+    write_to_file("elasticCV.csv", clf4_pred)
+
+def lassolarscv():
+    print ("Doing cross-validated LassoLars")
+    cross_val = cross_validation.ShuffleSplit(len(base_X), n_iter=5, test_size=0.2, random_state=0)
+    clf5 = LassoLarsCV(cv=cross_val)
+    clf5.fit(base_X, base_Y)
+    print ("Score = %f" % clf5.score(base_X, base_Y))
+    clf5_pred = clf5.predict(X_test)
+    write_to_file("lassolars.csv", clf5_pred)
+
+enetCV()
+lassolarscv()
 
 # LASSO/ENET PATH CALCULATIONS
 # Not sure how to make predictions with this...

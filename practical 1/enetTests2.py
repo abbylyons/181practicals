@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from rdkit import Chem
+from rdkit.Chem import AllChem
 from rdkit.Chem import ChemicalFeatures
 from rdkit import RDConfig
 import os
@@ -13,10 +14,12 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, Ela
 fdefName = os.path.join(RDConfig.RDDataDir,'BaseFeatures.fdef')
 factory = ChemicalFeatures.BuildFeatureFactory(fdefName)
 
+fpl = 1024
+
 df_train = pd.read_csv("train.csv")
-df_train = df_train.head(1000)
+df_train = df_train.head(100)
 df_test = pd.read_csv("test.csv")
-df_test = df_test.head(1000)
+df_test = df_test.head(100)
 
 def write_to_file(filename, predictions):
     with open(filename, "w") as f:
@@ -24,32 +27,52 @@ def write_to_file(filename, predictions):
         for i,p in enumerate(predictions):
             f.write(str(i+1) + "," + str(p) + "\n")
 
+
+def write_to_inp_file(filename, table):
+    with open(filename, "w") as f:
+        f.write("bit0")
+        for i in range(1,fpl):
+            f.write(", bit" + str(i))
+        f.write("\n")
+        for row in table:
+            for el in row[:-1]:
+                f.write(str(el) + ", ")
+            f.write(str(el)+ "\n")
+
+# function for generating features from molecules
 def getfeat(smile_array):
     feats = []
-    featIds = []
-    min = 6
-    maxId = 0
     for smile in smile_array:
+        bin_array = [0]*50
         m = Chem.MolFromSmiles(smile)
         f = factory.GetFeaturesForMol(m)
-        #if (len(f) < min): min = len(f)
-        feats.append(f[:min])
-    for m in range(0, len(feats)):
-    	for n in range(0, len(feats[m])):
-    		if (feats[m][n].GetId() > maxId): maxId = feats[m][n].GetId()
-    	#feats[m] = feats[m][:min]
-    print(maxId)
-    return np.vstack(featIds)
+        for feat in f:
+            bin_array[feat.GetId()] = 1
+        feats.append(bin_array[1:])
+    return feats
+
+# Function for generationg morgan fingerprints as inputs
+def fp_factory(smile_array, length, radius):
+    data_array = []
+    for smile in smile_array:
+        m = Chem.MolFromSmiles(smile)
+        data_array.append((AllChem.GetMorganFingerprintAsBitVect(
+            m, radius, nBits=length)).ToBitString())
+    in_array = np.array(data_array)
+    out_array = []
+    for fp_string in in_array:
+        out_array.append(list(fp_string))
+    return np.array(out_array, dtype=int)
+
 
 print("Loading data :)")
 #store gap values
 Y_train = df_train.gap.values
-print(Y_train)
-print(Y_train.shape)
-X_test = getfeat(df_test.smiles.values)
-base_X = getfeat(df_train.smiles.values)
+X_test = (fp_factory(df_test.smiles.values, fpl, 2))
+write_to_inp_file("X_test2.csv", X_test)
+base_X = np.vstack(fp_factory(df_train.smiles.values, fpl, 2))
+write_to_inp_file("base_X2.csv", base_X)
 base_Y = np.vstack(Y_train)
-print(base_Y)
 
 
 def ridgereg(a):
@@ -97,4 +120,4 @@ def lassolarscv():
     write_to_file("lassolars.csv", clf5_pred)
 
 enetCV()
-lassolarscv()
+# lassolarscv()

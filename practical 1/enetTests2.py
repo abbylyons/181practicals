@@ -14,12 +14,10 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, Ela
 fdefName = os.path.join(RDConfig.RDDataDir,'BaseFeatures.fdef')
 factory = ChemicalFeatures.BuildFeatureFactory(fdefName)
 
-fpl = 1024
+fpl = 512
 
-df_train = pd.read_csv("train.csv")
-df_train = df_train.head(100)
+# df_train = pd.read_csv("train.csv")
 df_test = pd.read_csv("test.csv")
-df_test = df_test.head(100)
 
 def write_to_file(filename, predictions):
     with open(filename, "w") as f:
@@ -29,6 +27,7 @@ def write_to_file(filename, predictions):
 
 
 def write_to_inp_file(filename, table):
+    print("Writing " + filename)
     with open(filename, "w") as f:
         f.write("bit0")
         for i in range(1,fpl):
@@ -54,25 +53,26 @@ def getfeat(smile_array):
 # Function for generationg morgan fingerprints as inputs
 def fp_factory(smile_array, length, radius):
     data_array = []
-    for smile in smile_array:
+    for i,smile in enumerate(smile_array):
+        if i % 10000 == 0 : print(i)
         m = Chem.MolFromSmiles(smile)
         data_array.append((AllChem.GetMorganFingerprintAsBitVect(
             m, radius, nBits=length)).ToBitString())
-    in_array = np.array(data_array)
+    data_array = np.array(data_array)
     out_array = []
-    for fp_string in in_array:
+    for fp_string in data_array:
         out_array.append(list(fp_string))
     return np.array(out_array, dtype=int)
 
 
 print("Loading data :)")
 #store gap values
-Y_train = df_train.gap.values
+# Y_train = df_train.gap.values
 X_test = (fp_factory(df_test.smiles.values, fpl, 2))
 write_to_inp_file("X_test2.csv", X_test)
-base_X = np.vstack(fp_factory(df_train.smiles.values, fpl, 2))
-write_to_inp_file("base_X2.csv", base_X)
-base_Y = np.vstack(Y_train)
+# base_X = np.vstack(fp_factory(df_train.smiles.values, fpl, 2))
+# write_to_inp_file("base_X2.csv", base_X)
+# base_Y = np.vstack(Y_train)
 
 
 def ridgereg(a):
@@ -119,5 +119,5 @@ def lassolarscv():
     clf5_pred = clf5.predict(X_test)
     write_to_file("lassolars.csv", clf5_pred)
 
-enetCV()
+# enetCV()
 # lassolarscv()

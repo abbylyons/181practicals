@@ -16,9 +16,9 @@ factory = ChemicalFeatures.BuildFeatureFactory(fdefName)
 
 fpl = 512
 
+
 df_train_new = pd.read_csv("base_X2.csv")
 df_y_train = pd.read_csv("y_train.csv")
-
 
 def write_to_file(filename, predictions):
     with open(filename, "w") as f:
@@ -28,6 +28,7 @@ def write_to_file(filename, predictions):
 
 
 def write_to_inp_file(filename, table):
+
     print("writing " + filename)
     with open(filename, "w") as f:
         f.write("gap")
@@ -54,15 +55,13 @@ def getfeat(smile_array):
 # Function for generationg morgan fingerprints as inputs
 def fp_factory(smile_array, length, radius):
     data_array = []
-    for i, smile in enumerate(smile_array):
-        if i % 10000 == 0:
-            print(i)
+    for i,smile in enumerate(smile_array):
+        if i % 10000 == 0 : print(i)
         m = Chem.MolFromSmiles(smile)
         data_array.append((AllChem.GetMorganFingerprintAsBitVect(
             m, radius, nBits=length)).ToBitString())
     data_array = np.array(data_array)
     return np.array([list(fp_string) for fp_string in data_array], dtype=int)
-
 
 print("Loading data :)")
 #store gap values
@@ -72,7 +71,6 @@ print("Loading data :)")
 # write_to_inp_file("base_X2.csv", base_X)
 base_Y = np.vstack(df_y_train.values)
 base_X = df_train_new.values
-
 
 def ridgereg(a):
     print("Doing ridge regression")
@@ -126,5 +124,5 @@ def lassolarscv():
     clf5_pred = clf5.predict(X_test)
     write_to_file("lassolars.csv", clf5_pred)
 
-enetCV()
+# enetCV()
 # lassolarscv()

@@ -25,6 +25,7 @@ double prim(Graph g)
 	finished[edges[0].a] = true;
 
 	double cost = 0.0;
+	
 	// start iterating
 	while (!done(finished, vertices))
 	{

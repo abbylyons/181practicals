@@ -37,7 +37,7 @@ Graph prim(Graph g)
 		for (unsigned int i = 0; i < size; ++i)
 		{
 			if (finished[edges[i].b])  continue;
-			pqueue.insert(edges[i]);
+			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
 	}
 	std::cout << "Cost is " << cost << std::endl;

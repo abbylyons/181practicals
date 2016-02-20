@@ -33,7 +33,7 @@ double prim(Graph g)
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
 		Edge top = pqueue.removeMin();
-		do
+		while (!pqueue.empty())
 		{
 			std::cout << pqueue.empty() << std::endl;
 			if (!finished[top.b])
@@ -44,7 +44,7 @@ double prim(Graph g)
 			}
 
 			top = pqueue.removeMin();
-		} while (!pqueue.empty());
+		}
 	}
 	return cost;
 }

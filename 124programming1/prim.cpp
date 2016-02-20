@@ -27,7 +27,6 @@ double prim(Graph g)
 	// start iterating
 	while (!done(finished, size))
 	{
-		std::cout << "E" << std::endl;
 		for (unsigned int i = 0; i < size; ++i)
 		{
 			if (finished[edges[i].b])  continue;
@@ -45,7 +44,6 @@ double prim(Graph g)
 				break;
 			}
 		}
-		std::cout << "C" << std::endl;
 	}
 	return cost;
 }

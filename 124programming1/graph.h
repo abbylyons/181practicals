@@ -5,10 +5,11 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
+#include <iostream>
 #include <math.h>
 
 // 2-dimensional graph, not on the coordinate plane
-typedef std:pair<float, float> d2Point;
+typedef std::pair<float, float> d2Point;
 typedef std::tuple<float, float, float> d3Point;
 typedef std::tuple<float, float, float, float> d4Point;
 

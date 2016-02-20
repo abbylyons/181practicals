@@ -1,15 +1,6 @@
 // prim.cpp
 
-#include "pqueue.h"
-
-#include <iostream>
-
-double prim(Graph g);
-
-int main(void)
-{
-	return 0;
-}
+#include "prim.h"
 
 bool done(bool * array, unsigned int size)
 {
@@ -33,7 +24,6 @@ double prim(Graph g)
 	finished[edges[0].a] = true;
 
 	double cost = 0.0;
-
 	// start iterating
 	while (!done(finished, size)) {
 		for (unsigned int i = 0; i < size; ++i)

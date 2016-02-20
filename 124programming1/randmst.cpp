@@ -11,7 +11,7 @@ int main (int argc, char *argv[])
   // argc should be 2 for correct execution
   if (argc != 5)
   {
-    cout << "Wrong input. Usage: randmst mode numpoints numtrials dimension" << endl;
+    std::cout << "Wrong input. Usage: randmst mode numpoints numtrials dimension" << std::endl;
     return 1;
   }
 
@@ -24,15 +24,17 @@ int main (int argc, char *argv[])
     dimension = atoi(argv[4]);
     if (dimension > 4 || dimension == 1)
     {
-      cout << "Wrong dimension" << endl;
+      std::cout << "Wrong dimension" << std::endl;
       return 1;
     }
 
     double total_cost = 0.0;
-    for (int i = 0; i < numtrials < i++)
+    for (int i = 0; i < numtrials; i++)
     {
       Graph g = Graph(numpoints, dimension);
       total_cost += prim(g);
     }
-    std::cout << total_cost/numtrials << " " << numpoints << " " << numtrials << " " << dimension td::endl;
+
+    std::cout << total_cost/numtrials << " " << numpoints << " " << numtrials << " " << dimension  << std::endl;
   }
+}

@@ -25,14 +25,15 @@ double prim(Graph g)
 
 	double cost = 0.0;
 	// start iterating
-	while (!done(finished, size)) {
+	while (!done(finished, size)) 
+	{
 		for (unsigned int i = 0; i < size; ++i)
 		{
 			if (finished[edges[i].b])  continue;
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
 		Edge top = pqueue.removeMin();
-		while (!pqueue.empty())
+		do
 		{
 			if (!finished[top.b])
 			{
@@ -40,7 +41,8 @@ double prim(Graph g)
 				finished[top.b] = true;
 				break;
 			}
-		}
+			top = pqueue.removeMin();
+		} while (!pqueue.empty());
 	}
 	return cost;
 }

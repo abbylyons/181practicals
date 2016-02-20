@@ -38,7 +38,6 @@ void Pqueue::insert(Edge e)
 
 Edge Pqueue::removeMin(void)
 {
-  //TODO: Check if empty
   Edge min = m_array[1];
   m_array[1] = m_array[m_end];
   m_end--;

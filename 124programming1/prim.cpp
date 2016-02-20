@@ -25,7 +25,7 @@ double prim(Graph g)
 
 	double cost = 0.0;
 	// start iterating
-	while (!done(finished, size)) 
+	while (!done(finished, size))
 	{
 		for (unsigned int i = 0; i < size; ++i)
 		{
@@ -35,12 +35,14 @@ double prim(Graph g)
 		Edge top = pqueue.removeMin();
 		do
 		{
+			std::cout << pqueue.empty() << std::endl;
 			if (!finished[top.b])
 			{
 				cost += top.w;
 				finished[top.b] = true;
 				break;
 			}
+
 			top = pqueue.removeMin();
 		} while (!pqueue.empty());
 	}

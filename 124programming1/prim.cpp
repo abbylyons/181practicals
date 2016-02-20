@@ -33,7 +33,7 @@ double prim(Graph g)
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
 		Edge top = pqueue.removeMin();
-		do
+		while (!pqueue.empty())
 		{
 			if (!finished[top.b])
 			{
@@ -42,7 +42,7 @@ double prim(Graph g)
 				break;
 			}
 			top = pqueue.removeMin();
-		} while (!pqueue.empty());
+		}
 	}
 	return cost;
 }

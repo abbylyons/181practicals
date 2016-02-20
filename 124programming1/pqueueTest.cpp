@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
   // initialize edges
   for(int i = 0; i < numpoints; i++)
   {
-    for(int j = i+1; j < numpoints; j++)
+    for(int j = i+1; j < l; j++)
     {
       Edge e;
       float x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);

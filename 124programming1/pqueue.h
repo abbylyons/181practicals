@@ -1,19 +1,14 @@
 // pqueue.h
 
-struct Edge
-{
-  float w;
-  unsigned short int a;
-  unsigned short int b;
-};
+#include "graph.h"
 
 class Pqueue
 {
   public:
+    Pqueue(int size);
     inline bool empty(void);
     void insert(Edge e);
     Edge removeMin(void);
-    Pqueue(int size);
     void print(void);
   private:
     Edge* m_array;

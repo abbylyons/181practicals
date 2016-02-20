@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-using namespace std;
-
 Pqueue::Pqueue(int size)
 {
   // initialize the array of edges
@@ -80,8 +78,8 @@ Edge Pqueue::removeMin(void)
 
 void Pqueue::print(void)
 {
-  for(int i = 1; i <= m_end; i++)
+  for(unsigned int i = 1; i <= m_end; i++)
   {
-    cout << m_array[i].w << endl;
+    std::cout << m_array[i].w << std::endl;
   }
 }

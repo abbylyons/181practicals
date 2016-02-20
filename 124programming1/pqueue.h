@@ -1,7 +1,5 @@
 // pqueue.h
 
-using namespace std;
-
 struct Edge
 {
   float w;
@@ -11,13 +9,18 @@ struct Edge
 
 class Pqueue
 {
-  private:
-    Edge* array;
-    unsigned long int end;
   public:
-    bool empty(void);
+    inline bool empty(void);
     void insert(Edge e);
     Edge removeMin(void);
     Pqueue(int size);
     void print(void);
+  private:
+    Edge* m_array;
+    unsigned long int m_end;
 };
+
+inline bool Pqueue::empty(void)
+{
+  return (m_end == 0);
+}

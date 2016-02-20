@@ -32,16 +32,15 @@ double prim(Graph g)
 			if (finished[edges[i].b])  continue;
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
-		Edge top = pqueue.removeMin();
 		while (!pqueue.empty())
 		{
+			Edge top = pqueue.removeMin();
 			if (!finished[top.b])
 			{
 				cost += top.w;
 				finished[top.b] = true;
 				break;
 			}
-			top = pqueue.removeMin();
 		}
 	}
 	return cost;

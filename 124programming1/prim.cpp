@@ -4,10 +4,7 @@
 
 #include <iostream>
 
-void prim(Graph g);
-D2Graph prim(D2Graph g);
-D3Graph prim(D3Graph g);
-D4Graph prim(D4Graph g);
+double prim(Graph g);
 
 int main(void)
 {
@@ -23,7 +20,7 @@ bool done(bool * array, unsigned int size)
 	return true;
 }
 
-void prim(Graph g)
+double prim(Graph g)
 {
 	// initialize priority queue
 	unsigned int size = g.size();
@@ -35,7 +32,7 @@ void prim(Graph g)
 	memset(finished, size * sizeof(bool), 0);
 	finished[edges[0].a] = true;
 
-	float cost = 0.0;
+	double cost = 0.0;
 
 	// start iterating
 	while (!done(finished, size)) {
@@ -55,5 +52,5 @@ void prim(Graph g)
 			}
 		}
 	}
-	std::cout << "Cost is " << cost << std::endl;
+	return cost;
 }

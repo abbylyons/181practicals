@@ -25,7 +25,6 @@ double prim(Graph g)
 
 	double cost = 0.0;
 	// start iterating
-	std::cout << "D" << std::endl;
 	while (!done(finished, size))
 	{
 		std::cout << "E" << std::endl;
@@ -34,11 +33,10 @@ double prim(Graph g)
 			if (finished[edges[i].b])  continue;
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
-		std::cout << "AA" << std::endl;
-		Edge top = pqueue.removeMin();
-		std::cout << "BB" << std::endl;
+
 		while (!pqueue.empty())
 		{
+			Edge top = pqueue.removeMin();
 			std::cout << pqueue.empty() << std::endl;
 			if (!finished[top.b])
 			{
@@ -46,9 +44,6 @@ double prim(Graph g)
 				finished[top.b] = true;
 				break;
 			}
-			std::cout << "A" << std::endl;
-			top = pqueue.removeMin();
-			std::cout << "B" << std::endl;
 		}
 		std::cout << "C" << std::endl;
 	}

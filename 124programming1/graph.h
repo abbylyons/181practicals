@@ -22,7 +22,7 @@ class Graph
 	public:
 		Graph();
 		Graph(int size);
-		unsigned int vertexCount();
+		unsigned int size();
 		void add(Edge edge);
 		void print();
 		std::vector<Edge> getEdges();

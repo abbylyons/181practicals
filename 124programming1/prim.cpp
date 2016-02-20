@@ -1,12 +1,13 @@
 // prim.cpp
 
-#include "graph.h"
 #include "pqueue.h"
 
+#include <iostream>
+
 Graph prim(Graph g);
-2dGraph prim(2dGraph g);
-3dGraph prim(3dGraph g);
-4dGraph prim(4dGraph g);
+D2Graph prim(D2Graph g);
+D3Graph prim(D3Graph g);
+D4Graph prim(D4Graph g);
 
 int main(void)
 {
@@ -20,12 +21,14 @@ Graph prim(Graph g)
 	Pqueue pqueue(size);
 	std::vector<Edge> edges = g.getEdges();
 	pqueue.insert(edges[0]);
-	bool finished[size] = {false};
+	bool finished[size];
+	memset(finished, size * sizeof(bool), 0);
+
 	float cost = 0.0;
 
 	// start iterating
 	while (!pqueue.empty()) {
-		Edge top = queue.removeMin();
+		Edge top = pqueue.removeMin();
 		if (!finished[top.b])
 		{
 			cost += top.w;
@@ -38,29 +41,7 @@ Graph prim(Graph g)
 		}
 	}
 	std::cout << "Cost is " << cost << std::endl;
-}
 
-2dGraph prim(2dGraph g)
-{
-
-}
-
-3dGraph prim(3dGraph g)
-{
-
-}
-
-4dGraph prim(4dGraph g)
-{
-
-}
-
-
-void func() {
-	
-	priority_queue< pii, vector< pii >, greater< pii > > Q;
-	Q.push(make_pair(0, 1));	// insert vertex 1 with cost 0
-	cost = 0;
-	
-	printf("%lld\n", cost);
+	// do I have to make a new graph? Help
+	return g;
 }

@@ -21,8 +21,8 @@ class Graph
 {
 	public:
 		Graph();
-		Graph(int size);
-		unsigned int size();
+		Graph(unsigned int size);
+		unsigned int size(); // number of vertices
 		void add(Edge edge);
 		void print();
 		std::vector<Edge> getEdges();

@@ -5,4 +5,4 @@
 
 
 double prim(Graph &g);
-bool done(bool * array, unsigned int size);
+bool done(char * array, unsigned int size);

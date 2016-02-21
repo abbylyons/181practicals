@@ -5,14 +5,21 @@
 double prim(Graph &g)
 {
 	// initialize priority queue
-	unsigned int vertices = g.size();
-	unsigned int edgeCount = g.numEdges();
+	const unsigned int vertices = g.size();
+	const unsigned int edgeCount = g.numEdges();
 	Pqueue pqueue(edgeCount);
 
 	// initialize finished array
 	// This is causing valgrind issues even though I clearly initialized it...
-	bool * finished = new bool[vertices];
-	memset(finished, vertices * sizeof(bool), false);
+	char * finished = new char[vertices];
+	/*for (int i = 0; i < vertices; ++i)
+	{
+		finished[i] = false;
+	}*/
+	memset(finished, 0, vertices * sizeof(char));
+	std::cout << "number of vertices: " << vertices << std::endl;
+	std::cout << "bool size " << sizeof(bool) << std::endl;
+	std::cout << "finished size " << sizeof(*finished) << std::endl;
 
 	// pick first node for tree
 	short int newVertex = g.getEdge(0).a;
@@ -65,7 +72,7 @@ double prim(Graph &g)
 	return cost;
 }
 
-bool done(bool * array, unsigned int size)
+bool done(char * array, unsigned int size)
 {
 	for (unsigned int i = 0; i < size; ++i)
 	{

@@ -14,7 +14,7 @@ Pqueue::Pqueue(int size)
   std::cout << "Making priority queue array..." << std::endl;
   m_array = (Edge*)malloc((sizeof(Edge))*(edges+1));
   std::cout << "Array made successfully" << std::endl;
-  memset(m_array, sizeof(Edge)*(edges+1), 0);
+  memset(m_array, 0, sizeof(Edge)*(edges+1));
 }
 
 void Pqueue::insert(Edge e)

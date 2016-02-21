@@ -3,12 +3,12 @@
 #include "graph.h"
 
 Graph::Graph(unsigned int size, unsigned int dimension)
+  : m_size(size)
 {
 
   // seed the random generator
   srand(time(NULL));
 
-  m_size = size;
   if (dimension == 0)
   {
     std::cout << "Working on graph..." << std::endl;

@@ -26,6 +26,12 @@ void Pqueue::insert(Edge e, unsigned short int target)
 {
   std::cout << "Inserting edge" << std::endl;
   unsigned short int pos;
+  if (target == 0)
+  {
+    unsigned short int temp = e.b;
+    e.b = e.a;
+    e.a = temp;
+  }
   // check whether there is a corresponding edge in the graph already.
   if (m_positions[e.b] != 0)
   {

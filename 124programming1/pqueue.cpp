@@ -44,6 +44,7 @@ Edge Pqueue::removeMin(void)
   unsigned long int pos = 1;
   while (pos < m_end)
   {
+
     // check if vertex has left child
     if(2*pos <= m_end)
     {
@@ -59,12 +60,16 @@ Edge Pqueue::removeMin(void)
           pos = 2*pos + 1;
         }
       }
-      else if (m_array[2*pos].w < m_array[pos].w)
+      if (m_array[2*pos].w < m_array[pos].w)
       {
         Edge temp = m_array[2*pos];
         m_array[2*pos] = m_array[pos];
         m_array[pos] = temp;
         pos = 2*pos;
+      }
+      else
+      {
+        return min;
       }
     }
     else

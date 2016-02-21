@@ -18,5 +18,5 @@ class Pqueue
 
 inline bool Pqueue::empty(void)
 {
-  return (m_end == 0);
+  return (m_end < 1);
 }

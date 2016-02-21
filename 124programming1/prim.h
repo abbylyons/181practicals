@@ -4,5 +4,5 @@
 #include <string.h>
 
 
-double prim(Graph g);
+double prim(Graph &g);
 bool done(bool * array, unsigned int size);

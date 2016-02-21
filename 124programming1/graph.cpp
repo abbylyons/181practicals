@@ -122,7 +122,12 @@ void Graph::print()
   return;
 }
 
-std::vector<Edge> Graph::getEdges()
+Edge Graph::getEdge(unsigned int index)
 {
-  return m_edges;
+  return m_edges[index];
+}
+
+unsigned int Graph::numEdges()
+{
+  return m_edges.size();
 }

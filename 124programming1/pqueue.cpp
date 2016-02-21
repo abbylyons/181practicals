@@ -7,11 +7,12 @@
 #include <math.h>
 
 Pqueue::Pqueue(int size)
+  : m_end(0)
 {
   // initialize the array of edges
   unsigned long int edges = (size*(size-1))/2;
   m_array = (Edge*)malloc((sizeof(Edge))*(edges+1));
-  m_end = 0;
+  memset(m_array, sizeof(Edge)*(edges+1), 0);
 }
 
 void Pqueue::insert(Edge e)
@@ -88,7 +89,7 @@ void Pqueue::print(void)
   }
 }
 
-void Pqueue::~Pqueue(void)
+Pqueue::~Pqueue(void)
 {
-  free m_array;
+  free(m_array);
 }

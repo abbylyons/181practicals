@@ -11,6 +11,7 @@ class Pqueue
     void insert(Edge e);
     Edge removeMin(void);
     void print(void);
+    ~Pqueue(void);
   private:
     Edge* m_array;
     unsigned long int m_end;

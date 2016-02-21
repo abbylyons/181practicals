@@ -31,4 +31,5 @@ class Graph
 	private:
 		std::vector<Edge> m_edges;
 		unsigned int m_size;
+		unsigned int m_dimension;
 };

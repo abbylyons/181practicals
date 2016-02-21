@@ -87,3 +87,8 @@ void Pqueue::print(void)
     std::cout << m_array[i].w << std::endl;
   }
 }
+
+void Pqueue::~Pqueue(void)
+{
+  free m_array;
+}

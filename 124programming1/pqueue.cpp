@@ -11,7 +11,9 @@ Pqueue::Pqueue(int size)
 {
   // initialize the array of edges
   unsigned long int edges = (size*(size-1))/2;
+  std::cout << "Making priority queue array..." << std::endl;
   m_array = (Edge*)malloc((sizeof(Edge))*(edges+1));
+  std::cout << "Array made successfully" << std::endl;
   memset(m_array, sizeof(Edge)*(edges+1), 0);
 }
 

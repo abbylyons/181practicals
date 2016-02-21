@@ -2,7 +2,6 @@
 
 int main (int argc, char *argv[])
 {
-
   unsigned short int mode = 0;
   unsigned short int numpoints = 0;
   unsigned short int numtrials = 0;

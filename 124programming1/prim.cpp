@@ -2,15 +2,6 @@
 
 #include "prim.h"
 
-bool done(bool * array, unsigned int size)
-{
-	for (unsigned int i = 0; i < size; ++i)
-	{
-		if (!array[i])  return false;
-	}
-	return true;
-}
-
 double prim(Graph &g)
 {
 	// initialize priority queue
@@ -19,19 +10,19 @@ double prim(Graph &g)
 	Pqueue pqueue(edgeCount);
 
 	// initialize finished array
+	// This is causing valgrind issues even though I clearly initialized it...
 	bool * finished = new bool[vertices];
 	memset(finished, vertices * sizeof(bool), false);
 
-	// let's get started!
+	// pick first node for tree
 	short int newVertex = g.getEdge(0).a;
-	std::cout << "First new vertex is " << newVertex << std::endl;
 	finished[newVertex] = true;
-
 	double cost = 0.0;
 
 	// start iterating
-	while (!done(finished, vertices))
+	while (!(done(finished, vertices)))
 	{
+		// add things to the queue
 		for (unsigned int i = 0; i < edgeCount; ++i)
 		{
 			Edge edge = g.getEdge(i);
@@ -49,6 +40,7 @@ double prim(Graph &g)
 			}
 		}
 
+		// get the shortest edge from the queue
 		while (!pqueue.empty())
 		{
 			Edge top = pqueue.removeMin();
@@ -71,4 +63,13 @@ double prim(Graph &g)
 	}
 	delete finished;
 	return cost;
+}
+
+bool done(bool * array, unsigned int size)
+{
+	for (unsigned int i = 0; i < size; ++i)
+	{
+		if (!array[i])  return false;
+	}
+	return true;
 }

@@ -34,16 +34,13 @@ double prim(Graph g)
 			if (finished[edges[i].b])  continue;
 			if (finished[edges[i].a])  pqueue.insert(edges[i]);
 		}
-		std::cout << "Edges added to queue" << std::endl;
 
 		while (!pqueue.empty())
 		{
 			Edge top = pqueue.removeMin();
-			std::cout << top.w << std::endl;
 			if (!finished[top.b])
 			{
 				cost += top.w;
-				std::cout << "Cost so far: " << cost << std::endl;
 				finished[top.b] = true;
 				break;
 			}

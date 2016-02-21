@@ -18,6 +18,8 @@ double prim(const Graph &g)
 	finished[newVertex] = true;
 	double cost = 0.0;
 
+	std::cout << "Gonna start iterating now" << std::endl;
+
 	// start iterating
 	while (!(done(finished, vertices)))
 	{
@@ -28,16 +30,17 @@ double prim(const Graph &g)
 			if (edge.a == newVertex)  
 			{
 				if (finished[edge.b])  continue;
-				pqueue.insert(edge);
+				pqueue.insert(edge, 1);
 				std::cout << edge.a << " " << edge.b << " " << edge.w << std::endl;
 			}
 			if (edge.b == newVertex)
 			{
 				if (finished[edge.a])  continue;
-				pqueue.insert(edge);
+				pqueue.insert(edge, 0);
 				std::cout << edge.a << " " << edge.b << " " << edge.w << std::endl;
 			}
 		}
+		pqueue.print();
 
 		// get the shortest edge from the queue
 		while (!pqueue.empty())

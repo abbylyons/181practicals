@@ -22,7 +22,7 @@ Pqueue::Pqueue(int size)
   std::cout << "Positions array set successfully" << std::endl;
 }
 
-void Pqueue::insert(Edge e)
+void Pqueue::insert(Edge e, unsigned short int target)
 {
   std::cout << "Inserting edge" << std::endl;
   unsigned short int pos;

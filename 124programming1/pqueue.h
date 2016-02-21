@@ -8,7 +8,7 @@ class Pqueue
   public:
     Pqueue(int size);
     inline bool empty(void);
-    void insert(Edge e);
+    void insert(Edge e, unsigned short int target);
     Edge removeMin(void);
     void print(void);
     ~Pqueue(void);

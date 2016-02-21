@@ -16,18 +16,21 @@ Pqueue::Pqueue(int size)
   std::cout << "Array made successfully" << std::endl;
   memset(m_array, 0, sizeof(Edge)*(edges+1));
   // array for holding positions
-  m_positions = (Edge*)malloc((sizeof(unsigned short int))*(edges+1));
+  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(edges+1));
+  std::cout << "Positions array made successfully" << std::endl;
   memset(m_positions, 0, sizeof(Edge)*(edges+1));
+  std::cout << "Positions array set successfully" << std::endl;
 }
 
 void Pqueue::insert(Edge e)
 {
+  std::cout << "Inserting edge" << std::endl;
   unsigned short int pos;
   // check whether there is a corresponding edge in the graph already.
   if (m_positions[e.b] != 0)
   {
     // check if new edge is "cheaper"
-    if (m_array[m_positions[e.b].w) > e.w)
+    if (m_array[m_positions[e.b]].w > e.w)
     {
       // swap the elements
       m_array[m_positions[e.b]] = e;
@@ -126,4 +129,5 @@ void Pqueue::print(void)
 Pqueue::~Pqueue(void)
 {
   free(m_array);
+  free(m_positions);
 }

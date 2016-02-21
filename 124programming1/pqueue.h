@@ -13,8 +13,8 @@ class Pqueue
     void print(void);
     ~Pqueue(void);
   private:
-    Edge* m_array;
-    unsigned short int m_positions;
+    Edge * m_array;
+    unsigned short int * m_positions;
     unsigned short int m_end;
 };
 

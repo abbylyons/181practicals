@@ -10,19 +10,43 @@ Pqueue::Pqueue(int size)
   : m_end(0)
 {
   // initialize the array of edges
-  unsigned long int edges = (size*(size-1))/2;
+  unsigned long int edges = (size);
   std::cout << "Making priority queue array..." << std::endl;
   m_array = (Edge*)malloc((sizeof(Edge))*(edges+1));
   std::cout << "Array made successfully" << std::endl;
   memset(m_array, 0, sizeof(Edge)*(edges+1));
+  // array for holding positions
+  m_positions = (Edge*)malloc((sizeof(unsigned short int))*(edges+1));
+  memset(m_positions, 0, sizeof(Edge)*(edges+1));
 }
 
 void Pqueue::insert(Edge e)
 {
-  // insert new edge to the end
-  m_end ++;
-  m_array[m_end] = e;
-  unsigned long int pos = m_end;
+  unsigned short int pos;
+  // check whether there is a corresponding edge in the graph already.
+  if (m_positions[e.b] != 0)
+  {
+    // check if new edge is "cheaper"
+    if (m_array[m_positions[e.b].w) > e.w)
+    {
+      // swap the elements
+      m_array[m_positions[e.b]] = e;
+      pos = m_positions[e.b];
+    }
+    else
+    {
+      //don't insert the edge
+      return;
+    }
+  }
+  else
+  {
+    // insert new edge to the end
+    m_end ++;
+    m_array[m_end] = e;
+    m_positions[e.b] = m_end;
+    pos = m_end;
+  }
 
   // keep swapping up to keep the order property
   while (pos/2 != 0) {
@@ -30,11 +54,13 @@ void Pqueue::insert(Edge e)
     {
       Edge temp = m_array[pos/2];
       m_array[pos/2] = m_array[pos];
+      m_positions[m_array[pos/2].b] = pos/2;
       m_array[pos] = temp;
+      m_positions[temp.b] = pos;
       pos = pos/2;
     }
     else {
-      break;
+      return;
     }
   }
 }
@@ -42,7 +68,9 @@ void Pqueue::insert(Edge e)
 Edge Pqueue::removeMin(void)
 {
   Edge min = m_array[1];
+  m_positions[min.b] = 0;
   m_array[1] = m_array[m_end];
+  m_positions[m_array[1].b] = 1;
   m_end--;
   unsigned long int pos = 1;
   while (pos < m_end)
@@ -59,7 +87,9 @@ Edge Pqueue::removeMin(void)
         {
           Edge temp = m_array[2*pos + 1];
           m_array[2*pos + 1] = m_array[pos];
+          m_positions[m_array[2*pos + 1].b] = 2*pos + 1;
           m_array[pos] = temp;
+          m_positions[m_array[pos].b] = pos;
           pos = 2*pos + 1;
         }
       }
@@ -67,7 +97,9 @@ Edge Pqueue::removeMin(void)
       {
         Edge temp = m_array[2*pos];
         m_array[2*pos] = m_array[pos];
+        m_positions[m_array[2*pos].b] = 2*pos;
         m_array[pos] = temp;
+        m_positions[m_array[pos].b] = pos;
         pos = 2*pos;
       }
       else

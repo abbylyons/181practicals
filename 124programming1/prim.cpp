@@ -7,6 +7,7 @@ double prim(const Graph &g)
 	// initialize priority queue
 	const unsigned int vertices = g.size();
 	const unsigned int edgeCount = g.numEdges();
+	std::cout << "count " << edgeCount << std::endl;
 	Pqueue pqueue(vertices);
 	float max = 0;
 
@@ -37,6 +38,7 @@ double prim(const Graph &g)
 				pqueue.insert(edge, 0);
 			}
 		}
+
 		// get the shortest edge from the queue
 		while (!pqueue.empty())
 		{
@@ -66,8 +68,6 @@ double prim(const Graph &g)
 			}
 		}
 	}
-	std::cout << "MAX" << std::endl;
-	std::cout << max << std::endl;
 	delete finished;
 	return cost;
 }

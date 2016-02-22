@@ -12,7 +12,6 @@ Pqueue::Pqueue(int size)
   // array for holding positions
   m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+2));
   memset(m_positions, 0, sizeof(unsigned short int)*(size+2));
-  std::cout << "Priority queue made successfully" << std::endl;
 }
 
 void Pqueue::insert(Edge e, unsigned short int target)
@@ -135,7 +134,6 @@ Edge Pqueue::removeMin(void)
 
 void Pqueue::print(void)
 {
-  std::cout << "pqueue" << std::endl;
   for(unsigned int i = 1; i <= m_end; i++)
   {
     std::cout << m_array[i].a << " " << m_array[i].b << " " << m_array[i].w << std::endl;
@@ -144,8 +142,7 @@ void Pqueue::print(void)
   {
     std::cout << m_positions[i] << ", ";
   }
-  std::cout << std::endl;
-  std::cout << "pqueue end" << std::endl;
+
 }
 
 Pqueue::~Pqueue(void)

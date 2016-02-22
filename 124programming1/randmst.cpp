@@ -27,15 +27,19 @@ int main (int argc, char *argv[])
         }
 
         double total_cost = 0.0;
+        double runtime = 0;
         for (int i = 0; i < numtrials; i++)
         {
             clock_t t = clock();
             Graph g = Graph(numpoints, dimension);
             total_cost += prim(g);
             t = clock() - t;
-            std::cout << "Runtime: " << (float) t << std::endl;
+            runtime += (double) t;
         }
 
         std::cout << total_cost/numtrials << " " << numpoints << " " << numtrials << " " << dimension  << std::endl;
+        std::cout << "Runtime: " << runtime/numtrials << std::endl;
+        std::cout << "------------" << std::endl;
     }
+    return 0;
 }

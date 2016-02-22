@@ -7,7 +7,7 @@ double prim(const Graph &g)
 	// initialize priority queue
 	const unsigned int vertices = g.size();
 	const unsigned int edgeCount = g.numEdges();
-	Pqueue pqueue(edgeCount);
+	Pqueue pqueue(vertices);
 
 	// initialize finished array
 	bool * const finished = new bool[vertices];

@@ -10,21 +10,19 @@ Pqueue::Pqueue(int size)
   : m_end(0)
 {
   // initialize the array of edges
-  unsigned long int edges = (size);
   std::cout << "Making priority queue array..." << std::endl;
-  m_array = (Edge*)malloc((sizeof(Edge))*(edges+1));
+  m_array = (Edge*)malloc((sizeof(Edge))*(size+1));
   std::cout << "Array made successfully" << std::endl;
-  memset(m_array, 0, sizeof(Edge)*(edges+1));
+  memset(m_array, 0, sizeof(Edge)*(size+1));
   // array for holding positions
-  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(edges+1));
+  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+1));
   std::cout << "Positions array made successfully" << std::endl;
-  memset(m_positions, 0, sizeof(Edge)*(edges+1));
+  memset(m_positions, 0, sizeof(unsigned short int)*(size+1));
   std::cout << "Positions array set successfully" << std::endl;
 }
 
 void Pqueue::insert(Edge e, unsigned short int target)
 {
-  std::cout << "Inserting edge" << std::endl;
   unsigned short int pos;
   if (target == 0)
   {
@@ -32,6 +30,8 @@ void Pqueue::insert(Edge e, unsigned short int target)
     e.b = e.a;
     e.a = temp;
   }
+  std::cout << e.a << " " << e.b << " " << e.w << std::endl;
+  std::cout << m_positions[e.b] << std::endl;
   // check whether there is a corresponding edge in the graph already.
   if (m_positions[e.b] != 0)
   {
@@ -78,10 +78,13 @@ Edge Pqueue::removeMin(void)
 {
   Edge min = m_array[1];
   m_positions[min.b] = 0;
-  m_array[1] = m_array[m_end];
-  m_positions[m_array[1].b] = 1;
-  m_end--;
   unsigned long int pos = 1;
+  if (m_end != 1)
+  {
+    m_array[1] = m_array[m_end];
+    m_positions[m_array[1].b] = 1;
+  }
+  m_end--;
   while (pos < m_end)
   {
 
@@ -126,10 +129,18 @@ Edge Pqueue::removeMin(void)
 
 void Pqueue::print(void)
 {
+  std::cout << "pqueue" << std::endl;
   for(unsigned int i = 1; i <= m_end; i++)
   {
-    std::cout << m_array[i].w << std::endl;
+    std::cout << m_array[i].a << m_array[i].b << m_array[i].w << std::endl;
+    std::cout << m_positions[i] << std::endl;  
   }
+  for (int i = 0; i < 11; i++)
+  {
+    std::cout << m_positions[i] << ", ";
+  }
+  std::cout << std::endl;
+  std::cout << "pqueue end" << std::endl;
 }
 
 Pqueue::~Pqueue(void)

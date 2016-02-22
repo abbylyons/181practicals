@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <math.h>
+#include <cstring>
 
 // 2-dimensional graph, not on the coordinate plane
 typedef std::pair<float, float> d2Point;

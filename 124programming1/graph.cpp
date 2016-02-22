@@ -13,7 +13,7 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
         std::cout << "Working on graph..." << std::endl;
         for (unsigned int i = 0; i < m_size; i++)
         {
-            for (unsigned int j = i; j < m_size; j++)
+            for (unsigned int j = i+1; j < m_size; j++)
             {
                 Edge e;
                 e.a = i;
@@ -37,7 +37,7 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
 
         for (unsigned int i = 0; i < m_size; i++)
         {
-            for (unsigned int j = i; j < m_size; j++)
+            for (unsigned int j = i+1; j < m_size; j++)
             {
                 Edge e;
                 e.a = i;
@@ -62,7 +62,7 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
         }
         for (unsigned int i = 0; i < m_size; i++)
         {
-            for (unsigned int j = i; j < m_size; j++)
+            for (unsigned int j = i+1; j < m_size; j++)
             {
                 Edge e;
                 e.a = i;
@@ -89,7 +89,7 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
         }
         for (unsigned int i = 0; i < m_size; i++)
         {
-            for (unsigned int j = i; j < m_size; j++)
+            for (unsigned int j = i+1; j < m_size; j++)
             {
                 Edge e;
                 e.a = i;

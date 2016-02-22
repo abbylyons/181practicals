@@ -7,7 +7,7 @@ double prim(const Graph &g)
 	// initialize priority queue
 	const unsigned int vertices = g.size();
 	const unsigned int edgeCount = g.numEdges();
-	Pqueue pqueue(edgeCount);
+	Pqueue pqueue(vertices);
 
 	// initialize finished array
 	bool * const finished = new bool[vertices];
@@ -22,10 +22,10 @@ double prim(const Graph &g)
 	while (!(done(finished, vertices)))
 	{
 		// add things to the queue
-		for (unsigned int i = 0; i < edgeCount; ++i)
+		for (unsigned int i = 0; i < edgeCount-1; ++i)
 		{
 			const Edge edge = g.getEdge(i);
-			if (edge.a == newVertex)  
+			if (edge.a == newVertex)
 			{
 				if (finished[edge.b])  continue;
 				pqueue.insert(edge, 1);

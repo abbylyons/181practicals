@@ -1,23 +1,20 @@
 // pqueue.cpp
 
 #include "pqueue.h"
-#include <iostream>
-#include <time.h>
-#include <stdlib.h>
-#include <math.h>
+
 
 Pqueue::Pqueue(int size)
   : m_end(0)
 {
   // initialize the array of edges
   std::cout << "Making priority queue array..." << std::endl;
-  m_array = (Edge*)malloc((sizeof(Edge))*(size+1));
+  m_array = (Edge*)malloc((sizeof(Edge))*(size+2));
   std::cout << "Array made successfully" << std::endl;
-  memset(m_array, 0, sizeof(Edge)*(size+1));
+  memset(m_array, 0, sizeof(Edge)*(size+2));
   // array for holding positions
-  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+1));
+  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+2));
   std::cout << "Positions array made successfully" << std::endl;
-  memset(m_positions, 0, sizeof(unsigned short int)*(size+1));
+  memset(m_positions, 0, sizeof(unsigned short int)*(size+2));
   std::cout << "Positions array set successfully" << std::endl;
 }
 
@@ -33,7 +30,7 @@ void Pqueue::insert(Edge e, unsigned short int target)
   std::cout << e.a << " " << e.b << " " << e.w << std::endl;
   std::cout << m_positions[e.b] << std::endl;
   // check whether there is a corresponding edge in the graph already.
-  if (m_positions[e.b] != 0)
+  if (m_positions[e.b] > 0)
   {
     // check if new edge is "cheaper"
     if (m_array[m_positions[e.b]].w > e.w)
@@ -58,7 +55,8 @@ void Pqueue::insert(Edge e, unsigned short int target)
   }
 
   // keep swapping up to keep the order property
-  while (pos/2 != 0) {
+  while (pos/2 != 0)
+  {
     if (m_array[pos].w < m_array[pos/2].w)
     {
       Edge temp = m_array[pos/2];
@@ -87,7 +85,6 @@ Edge Pqueue::removeMin(void)
   m_end--;
   while (pos < m_end)
   {
-
     // check if vertex has left child
     if(2*pos <= m_end)
     {
@@ -104,8 +101,21 @@ Edge Pqueue::removeMin(void)
           m_positions[m_array[pos].b] = pos;
           pos = 2*pos + 1;
         }
+        else if (m_array[2*pos].w < m_array[pos].w)
+        {
+          Edge temp = m_array[2*pos];
+          m_array[2*pos] = m_array[pos];
+          m_positions[m_array[2*pos].b] = 2*pos;
+          m_array[pos] = temp;
+          m_positions[m_array[pos].b] = pos;
+          pos = 2*pos;
+        }
+        else
+        {
+          return min;
+        }
       }
-      if (m_array[2*pos].w < m_array[pos].w)
+      else if (m_array[2*pos].w < m_array[pos].w)
       {
         Edge temp = m_array[2*pos];
         m_array[2*pos] = m_array[pos];
@@ -132,7 +142,7 @@ void Pqueue::print(void)
   std::cout << "pqueue" << std::endl;
   for(unsigned int i = 1; i <= m_end; i++)
   {
-    std::cout << m_array[i].a << m_array[i].b << m_array[i].w << std::endl; 
+    std::cout << m_array[i].a << " " << m_array[i].b << " " << m_array[i].w << std::endl;
   }
   for (int i = 0; i < 11; i++)
   {

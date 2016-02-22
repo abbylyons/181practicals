@@ -2,7 +2,6 @@
 
 #include "pqueue.h"
 
-
 Pqueue::Pqueue(int size)
   : m_end(0)
 {
@@ -100,10 +99,7 @@ Edge Pqueue::removeMin(void)
                     m_positions[m_array[pos].b] = pos;
                     pos = 2 * pos;
                 }
-                else
-                {
-                    return min;
-                }
+                else return min;
             }
             else if (m_array[2 * pos].w < m_array[pos].w)
             {
@@ -114,15 +110,9 @@ Edge Pqueue::removeMin(void)
                 m_positions[m_array[pos].b] = pos;
                 pos = 2 * pos;
             }
-            else
-            {
-                return min;
-            }
+            else return min;
         }
-        else
-        {
-            return min;
-        }
+        else return min;
     }
     return min;
 }

@@ -9,7 +9,6 @@ double prim(const Graph &g)
 	const unsigned int edgeCount = g.numEdges();
 	std::cout << "count " << edgeCount << std::endl;
 	Pqueue pqueue(vertices);
-	float max = 0;
 
 	// initialize finished array
 	bool * const finished = new bool[vertices];
@@ -46,11 +45,6 @@ double prim(const Graph &g)
 			if (!finished[top.b])
 			{
 				cost += top.w;
-				std::cout << top.w << std::endl;
-				if (top.w > max)
-				{
-					max = top.w;
-				}
 				newVertex = top.b;
 				finished[newVertex] = true;
 				break;
@@ -58,10 +52,6 @@ double prim(const Graph &g)
 			if (!finished[top.a])
 			{
 				cost += top.w;
-				if (top.w > max)
-				{
-					max = top.w;
-				}
 				newVertex = top.a;
 				finished[newVertex] = true;
 				break;

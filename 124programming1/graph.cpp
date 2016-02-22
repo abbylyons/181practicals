@@ -10,7 +10,6 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
 
     if (dimension == 0)
     {
-        std::cout << "Working on graph..." << std::endl;
         for (unsigned int i = 0; i < m_size; i++)
         {
             for (unsigned int j = i+1; j < m_size; j++)
@@ -23,7 +22,6 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
                 m_edges.push_back(e);
             }
         }
-        std::cout << "Graph made successfully" << std::endl;
     }
     else if (dimension == 2)
     {

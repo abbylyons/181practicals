@@ -17,7 +17,7 @@ int main (int argc, char *argv[])
     else
     {
         // const unsigned short int mode = atoi(argv[1]);
-        const unsigned short int numpoints = atoi(argv[2]);
+        const unsigned int numpoints = atoi(argv[2]);
         const unsigned short int numtrials = atoi(argv[3]);
         const unsigned short int dimension = atoi(argv[4]);
         if (dimension > 4 || dimension == 1)

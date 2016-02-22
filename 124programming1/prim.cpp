@@ -8,6 +8,7 @@ double prim(const Graph &g)
 	const unsigned int vertices = g.size();
 	const unsigned int edgeCount = g.numEdges();
 	Pqueue pqueue(vertices);
+	float max = 0;
 
 	// initialize finished array
 	bool * const finished = new bool[vertices];
@@ -29,24 +30,25 @@ double prim(const Graph &g)
 			{
 				if (finished[edge.b])  continue;
 				pqueue.insert(edge, 1);
-				//std::cout << edge.a << " " << edge.b << " " << edge.w << std::endl;
 			}
 			if (edge.b == newVertex)
 			{
 				if (finished[edge.a])  continue;
 				pqueue.insert(edge, 0);
-				//std::cout << edge.a << " " << edge.b << " " << edge.w << std::endl;
 			}
 		}
-		pqueue.print();
 		// get the shortest edge from the queue
 		while (!pqueue.empty())
 		{
 			const Edge top = pqueue.removeMin();
-			std::cout << "Remove min: " << top.w << std::endl;
 			if (!finished[top.b])
 			{
 				cost += top.w;
+				std::cout << top.w << std::endl;
+				if (top.w > max)
+				{
+					max = top.w;
+				}
 				newVertex = top.b;
 				finished[newVertex] = true;
 				break;
@@ -54,12 +56,18 @@ double prim(const Graph &g)
 			if (!finished[top.a])
 			{
 				cost += top.w;
+				if (top.w > max)
+				{
+					max = top.w;
+				}
 				newVertex = top.a;
 				finished[newVertex] = true;
 				break;
 			}
 		}
 	}
+	std::cout << "MAX" << std::endl;
+	std::cout << max << std::endl;
 	delete finished;
 	return cost;
 }

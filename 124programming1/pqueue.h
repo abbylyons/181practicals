@@ -13,8 +13,8 @@ class Pqueue
         ~Pqueue(void);
     private:
         Edge * m_array;
-        unsigned short int * m_positions;
-        unsigned short int m_end;
+        unsigned int * m_positions;
+        unsigned int m_end;
 };
 
 inline bool Pqueue::empty(void)

@@ -10,16 +10,16 @@ Pqueue::Pqueue(int size)
   m_array = (Edge*)malloc((sizeof(Edge))*(size+2));
   memset(m_array, 0, sizeof(Edge)*(size+2));
   // array for holding positions
-  m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+2));
-  memset(m_positions, 0, sizeof(unsigned short int)*(size+2));
+  m_positions = (unsigned int *)malloc((sizeof(unsigned int))*(size+2));
+  memset(m_positions, 0, sizeof(unsigned int)*(size+2));
 }
 
 void Pqueue::insert(Edge e, unsigned short int target)
 {
-  unsigned short int pos;
+  unsigned int pos;
   if (target == 0)
   {
-    unsigned short int temp = e.b;
+    unsigned int temp = e.b;
     e.b = e.a;
     e.a = temp;
   }

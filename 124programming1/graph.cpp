@@ -10,6 +10,8 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
 
     if (dimension == 0)
     {
+        float cutoff = 15 / pow(10, (log (m_size) / 2.303));
+
         for (unsigned int i = 0; i < m_size; i++)
         {
             for (unsigned int j = i+1; j < m_size; j++)
@@ -18,7 +20,7 @@ Graph::Graph(const unsigned int size, const unsigned int dimension)
                 e.a = i;
                 e.b = j;
                 e.w = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-                if (e.w > .01 && m_size > 1000)  continue;
+                if (e.w > cutoff && m_size > 1000)  continue;
                 m_edges.push_back(e);
             }
         }

@@ -29,8 +29,8 @@ int main (int argc, char *argv[])
         double total_cost = 0.0;
         for (int i = 0; i < numtrials; i++)
         {
-            Graph g = Graph(numpoints, dimension);
             clock_t t = clock();
+            Graph g = Graph(numpoints, dimension);
             total_cost += prim(g);
             t = clock() - t;
             std::cout << "Runtime: " << (float) t << std::endl;

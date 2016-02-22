@@ -7,15 +7,12 @@ Pqueue::Pqueue(int size)
   : m_end(0)
 {
   // initialize the array of edges
-  std::cout << "Making priority queue array..." << std::endl;
   m_array = (Edge*)malloc((sizeof(Edge))*(size+2));
-  std::cout << "Array made successfully" << std::endl;
   memset(m_array, 0, sizeof(Edge)*(size+2));
   // array for holding positions
   m_positions = (unsigned short int *)malloc((sizeof(unsigned short int))*(size+2));
-  std::cout << "Positions array made successfully" << std::endl;
   memset(m_positions, 0, sizeof(unsigned short int)*(size+2));
-  std::cout << "Positions array set successfully" << std::endl;
+  std::cout << "Priority queue made successfully" << std::endl;
 }
 
 void Pqueue::insert(Edge e, unsigned short int target)
@@ -27,8 +24,7 @@ void Pqueue::insert(Edge e, unsigned short int target)
     e.b = e.a;
     e.a = temp;
   }
-  std::cout << e.a << " " << e.b << " " << e.w << std::endl;
-  std::cout << m_positions[e.b] << std::endl;
+
   // check whether there is a corresponding edge in the graph already.
   if (m_positions[e.b] > 0)
   {

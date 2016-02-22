@@ -132,8 +132,7 @@ void Pqueue::print(void)
   std::cout << "pqueue" << std::endl;
   for(unsigned int i = 1; i <= m_end; i++)
   {
-    std::cout << m_array[i].a << m_array[i].b << m_array[i].w << std::endl;
-    std::cout << m_positions[i] << std::endl;  
+    std::cout << m_array[i].a << m_array[i].b << m_array[i].w << std::endl; 
   }
   for (int i = 0; i < 11; i++)
   {

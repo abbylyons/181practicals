@@ -4,7 +4,7 @@ for i in `seq 0 2`;
 do
   if [  "$i" -ne "1"  ]
     then
-      for n in `seq 0 12`;
+      for n in `seq 0 11`;
       do
         ./randmst 0 ${numpoints[$n]} 3 $i
       done

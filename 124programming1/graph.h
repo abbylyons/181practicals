@@ -25,7 +25,7 @@ class Graph
 {
 	public:
 		Graph(const unsigned int size, const unsigned int dimension);
-		unsigned int size() const; // number of vertices
+		inline unsigned int size() const; // number of vertices
 		void print() const;
 		Edge getEdge(const unsigned int index) const;
 		unsigned int numEdges() const;
@@ -33,3 +33,8 @@ class Graph
 		std::vector<Edge> m_edges;
 		const unsigned int m_size;
 };
+
+inline unsigned int Graph::size() const
+{
+    return m_size;
+}

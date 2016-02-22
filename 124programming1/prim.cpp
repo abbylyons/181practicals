@@ -2,7 +2,7 @@
 
 #include "prim.h"
 
-double prim(const Graph &g)
+double prim(const Graph & g)
 {
 	// initialize priority queue
 	const unsigned int vertices = g.size();
@@ -14,10 +14,9 @@ double prim(const Graph &g)
 	memset(finished, 0, vertices * sizeof(bool));
 
 	// pick first node for tree
-	short int newVertex = g.getEdge(0).a;
+	unsigned int newVertex = g.getEdge(0).a;
 	finished[newVertex] = true;
 	double cost = 0.0;
-
 	// start iterating
 	while (!(done(finished, vertices)))
 	{

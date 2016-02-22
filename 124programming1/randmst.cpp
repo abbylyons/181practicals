@@ -16,7 +16,6 @@ int main (int argc, char *argv[])
     // get parameters
     else
     {
-        // const unsigned short int mode = atoi(argv[1]);
         const unsigned int numpoints = atoi(argv[2]);
         const unsigned short int numtrials = atoi(argv[3]);
         const unsigned short int dimension = atoi(argv[4]);
@@ -28,7 +27,7 @@ int main (int argc, char *argv[])
 
         double total_cost = 0.0;
         double runtime = 0;
-        for (int i = 0; i < numtrials; i++)
+        for (int i = 0; i < numtrials; ++i)
         {
             clock_t t = clock();
             Graph g = Graph(numpoints, dimension);
@@ -37,7 +36,8 @@ int main (int argc, char *argv[])
             runtime += (double) t;
         }
 
-        std::cout << total_cost/numtrials << " " << numpoints << " " << numtrials << " " << dimension  << std::endl;
+        std::cout << total_cost/numtrials << " " << numpoints << " " 
+                  << numtrials << " " << dimension  << std::endl;
         std::cout << "Runtime: " << runtime/(numtrials * CLOCKS_PER_SEC) << std::endl;
         std::cout << "------------" << std::endl;
     }

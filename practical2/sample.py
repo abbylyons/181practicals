@@ -60,7 +60,6 @@ def create_data_matrix(start_index, end_index, direc="train"):
         tree = ET.parse(os.path.join(direc,datafile))
         add_to_set(tree)
         this_row = np.append(find_call_distribution(tree), seek_vba(tree))
-        print this_row
         if X is None:
             X = this_row
         else:

@@ -16,6 +16,7 @@ import util as ut
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.grid_search import GridSearchCV
+from sklearn.neural_network import MLPClassifier
 
 import util
 
@@ -118,23 +119,24 @@ def call_feats(tree):
 
 ## Feature extraction
 def main():
-    X_train, t_train, train_ids = create_data_matrix(0, 3086, TRAIN_DIR)
-    # X_valid, t_valid, valid_ids = create_data_matrix(1000, 2000, TRAIN_DIR)
-    X_test, t_test, test_ids = create_data_matrix(0,3724, TEST_DIR)
+    X_train, t_train, train_ids = create_data_matrix(0, 1000, TRAIN_DIR)
+    X_valid, t_valid, valid_ids = create_data_matrix(1000, 2000, TRAIN_DIR)
+    # X_test, t_test, test_ids = create_data_matrix(0,3724, TEST_DIR)
 
     # print 'Data matrix (training set):'
     # print np.array(X_train)
     # print 'Classes (training set):'
     # print np.array(t_train)
 
-    clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
+    # clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
+    clf = MLPClassifier(algorithm='l-bfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
     # use a full grid over all parameters
-    param_grid = {"max_depth": [3, None],
-              "max_features": [1, 3, 10],
-              "min_samples_split": [1, 3, 10],
-              "min_samples_leaf": [1, 3, 10],
-              "bootstrap": [True, False],
-              "criterion": ["gini", "entropy"]}
+    # param_grid = {"max_depth": [3, None],
+    #           "max_features": [1, 3, 10],
+    #           "min_samples_split": [1, 3, 10],
+    #           "min_samples_leaf": [1, 3, 10],
+    #           "bootstrap": [True, False],
+    #           "criterion": ["gini", "entropy"]}
 
     # # run grid search
     # grid_search = GridSearchCV(clf, param_grid=param_grid)
@@ -143,8 +145,17 @@ def main():
     # print grid_search.best_params_
 
     clf = clf.fit(X_train, t_train)
-    preds = clf.predict(X_test)
-    ut.write_predictions(preds, test_ids, "result.csv")
+    preds = clf.predict(X_valid)
+    right = 0
+    wrong = 0
+    for p, pred in preds:
+        if pred == t_valid[p]:
+            right +=1
+        else:
+            wrong +=1
+    print right
+    print wrong
+    # ut.write_predictions(preds, test_ids, "result.csv")
 
 if __name__ == "__main__":
     main()

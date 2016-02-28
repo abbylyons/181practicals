@@ -133,8 +133,8 @@ def main():
         layers=[
             Layer("Rectifier", units=100),
             Layer("Linear")],
-        learning_rate=0.02,
-        n_iter=100)
+        learning_rate=0.001,
+        n_iter=100000)
     # use a full grid over all parameters
     # param_grid = {"max_depth": [3, None],
     #           "max_features": [1, 3, 10],
@@ -153,8 +153,8 @@ def main():
     preds = clf.predict(X_valid)
     right = 0
     wrong = 0
-    for p, pred in preds:
-        if pred == t_valid[p]:
+    for p, pred in enumerate(preds):
+        if np.round(pred) == t_valid[p]:
             right +=1
         else:
             wrong +=1

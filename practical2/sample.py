@@ -16,7 +16,7 @@ import util as ut
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.grid_search import GridSearchCV
-from sklearn.neural_network import MLPClassifier
+from sknn.mlp import Regressor, Layer
 
 import util
 
@@ -129,7 +129,12 @@ def main():
     # print np.array(t_train)
 
     # clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
-    clf = MLPClassifier(algorithm='l-bfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+    clf = Regressor(
+        layers=[
+            Layer("Rectifier", units=100),
+            Layer("Linear")],
+        learning_rate=0.02,
+        n_iter=100)
     # use a full grid over all parameters
     # param_grid = {"max_depth": [3, None],
     #           "max_features": [1, 3, 10],

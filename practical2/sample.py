@@ -29,6 +29,8 @@ def create_data_matrix(start_index, end_index, direc="train"):
     classes = []
     ids = []
     i = -1
+    right = 0
+    wrong = 0
     for datafile in os.listdir(direc):
         if datafile == '.DS_Store':
             continue
@@ -51,9 +53,13 @@ def create_data_matrix(start_index, end_index, direc="train"):
             # if this is test data, which always has an "X" label
             assert clazz == "X"
             classes.append(-1)
-
         # parse file as an xml document
         tree = ET.parse(os.path.join(direc,datafile))
+        if seek_vba(tree):
+            if classes[-1] == 12:
+                right += 1
+            else:
+                wrong += 1
         add_to_set(tree)
         this_row = call_feats(tree)
         if X is None:
@@ -61,7 +67,21 @@ def create_data_matrix(start_index, end_index, direc="train"):
         else:
             X = np.vstack((X, this_row))
 
+    print "right: ", right
+    print "wrong: ", wrong
     return X, np.array(classes), ids
+
+
+def seek_vba(tree):
+    target_call = "open_key"
+    VBA_key = "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VBA\Monitors"
+
+    for el in tree.iter():
+        if el.tag == target_call:
+            if el.get("key") == VBA_key:
+                return True
+    return False
+
 
 def call_feats(tree):
     good_calls = ['sleep', 'dump_line']
@@ -85,16 +105,21 @@ def call_feats(tree):
 
 ## Feature extraction
 def main():
-    X_train, t_train, train_ids = create_data_matrix(0, 5, TRAIN_DIR)
-    X_valid, t_valid, valid_ids = create_data_matrix(10, 15, TRAIN_DIR)
+    X_train, t_train, train_ids = create_data_matrix(0, 1000, TRAIN_DIR)
+    # X_valid, t_valid, valid_ids = create_data_matrix(10, 15, TRAIN_DIR)
 
-    print 'Data matrix (training set):'
-    print X_train
-    print 'Classes (training set):'
-    print t_train
+    # print 'Data matrix (training set):'
+    # print X_train
+    # print 'Classes (training set):'
+    #print t_train
+    cnt = 0
+    for el in t_train:
+        if el == 12:
+            cnt+=1
+    print"tot "
+    print cnt
 
     # From here, you can train models (eg by importing sklearn and inputting X_train, t_train).
 
 if __name__ == "__main__":
     main()
-    

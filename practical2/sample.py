@@ -140,6 +140,7 @@ def main():
 
     # Random Forest
     clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
+
     # Grid search
     # param_grid = {"n_neighbors": [3, 5, 10, 15],
     #           "weights": ['uniform', 'distance'],
@@ -155,7 +156,7 @@ def main():
     right = 0
     wrong = 0
     for p, pred in enumerate(preds):
-        if pred == t_valid[p]:
+        if np.round(pred) == t_valid[p]:
             right +=1
         else:
             wrong +=1

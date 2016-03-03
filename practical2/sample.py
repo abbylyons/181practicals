@@ -16,7 +16,7 @@ import util as ut
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import cross_val_score
 from sklearn.grid_search import GridSearchCV
-from sknn.mlp import Regressor, Layer
+# from sknn.mlp import Regressor, Layer
 
 import util
 
@@ -75,7 +75,7 @@ def find_call_distribution(tree):
         if el.tag in all_calls:
             distribution[all_calls.index(el.tag)] += 1.0
         count += 1.0
-    return np.divide(np.array(distribution), count)
+    return np.append(np.divide(np.array(distribution), count), count)
 
 def seek_tdss(tree):
     target_call = "vm_protect"
@@ -128,13 +128,13 @@ def main():
     # print 'Classes (training set):'
     # print np.array(t_train)
 
-    # clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
-    clf = Regressor(
-        layers=[
-            Layer("Rectifier", units=100),
-            Layer("Linear")],
-        learning_rate=0.02,
-        n_iter=100)
+    clf = RandomForestClassifier(n_estimators=20, max_depth = None, max_features =1, criterion = "gini", min_samples_split = 1, min_samples_leaf = 1, bootstrap = False)
+    # clf = Regressor(
+    #     layers=[
+    #         Layer("Rectifier", units=100),
+    #         Layer("Linear")],
+    #     learning_rate=0.02,
+    #     n_iter=100)
     # use a full grid over all parameters
     # param_grid = {"max_depth": [3, None],
     #           "max_features": [1, 3, 10],
@@ -153,7 +153,7 @@ def main():
     preds = clf.predict(X_valid)
     right = 0
     wrong = 0
-    for p, pred in preds:
+    for p, pred in enumerate(preds):
         if pred == t_valid[p]:
             right +=1
         else:

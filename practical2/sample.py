@@ -36,7 +36,6 @@ def create_data_matrix(start_index, end_index, direc="train"):
     ids = []
     i = -1
     # testing stuff
-    f = open('statistics', 'w')
 
     for datafile in os.listdir(direc):
         if datafile == '.DS_Store':
@@ -64,21 +63,12 @@ def create_data_matrix(start_index, end_index, direc="train"):
         tree = ET.parse(os.path.join(direc,datafile))
         add_to_set(tree)
         this_row = np.append(find_call_distribution(tree), seek_vba(tree))
-        f.write(find_dll_distribution(tree))
 
         if X is None:
             X = this_row
         else:
             X = np.vstack((X, this_row))
     return X, np.array(classes), ids
-
-def find_dll_distribution(tree):
-    all_dlls = ['C:\WINDOWS\system32\\ntdll.dll', 'C:\WINDOWS\system32\kernel32.dll', 'C:\WINDOWS\system32\SHELL32.dll', 'C:\WINDOWS\system32\ADVAPI32.dll', 'C:\WINDOWS\system32\RPCRT4.dll', 'C:\WINDOWS\system32\Secur32.dll', 'C:\WINDOWS\system32\GDI32.dll', 'C:\WINDOWS\system32\USER32.dll', 'C:\WINDOWS\system32\msvcrt.dll', 'C:\WINDOWS\system32\SHLWAPI.dll', 'C:\WINDOWS\system32\IMM32.DLL', 'C:\WINDOWS\WinSxS\\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.2600.5512_x-ww_35d4ce83\'', 'C:\WINDOWS\system32\comctl32.dll', 'C:\WINDOWS\system32\oleaut32.dll', 'C:\WINDOWS\system32\ole32.dll', 'C:\WINDOWS\system32\pstorec.dll', 'C:\WINDOWS\system32\ATL.DLL']
-    distribution = [0.0]*len(all_dlls)
-    for el in tree.iter():
-        if el.tag == 'load_dll':
-            distribution[all_dlls.index(el.filename)] += 1.0
-    return np.array(distribution)
 
 def find_call_distribution(tree):
     all_calls = ['processes', 'process', 'thread', 'all_section', 'load_image', 'load_dll', 'open_key', 'get_file_attributes', 'vm_protect', 'create_file', 'set_file_attributes', 'open_file', 'query_value', 'find_file', 'check_for_debugger', 'create_process', 'delete_file', 'kill_process', 'enum_window', 'create_mutex', 'create_thread', 'get_system_directory', 'enum_keys', 'get_username', 'create_key', 'set_value', 'vm_allocate', 'vm_write', 'create_thread_remote', 'create_open_file', 'get_host_by_name', 'set_windows_hook', 'create_window', 'get_computer_name', 'impersonate_user', 'open_scmanager', 'create_socket', 'bind_socket', 'connect_socket', 'send_socket', 'dump_line', 'recv_socket', 'trimmed_bytes', 'open_url', 'sleep', 'open_mutex', 'open_service', 'enum_values', 'get_windows_directory', 'find_window', 'enum_modules', 'enum_processes', 'copy_file', 'read_value', 'write_value', 'get_system_time', 'com_create_instance', 'com_get_class_object', 'move_file', 'control_service', 'start_service', 'create_namedpipe', 'delete_value', 'create_directory', 'connect', 'message', 'show_window', 'destroy_window', 'set_file_time', 'open_process', 'enum_share', 'create_process_as_user', 'revert_to_self', 'remove_directory', 'delete_key', 'download_file', 'listen_socket', 'add_netjob', 'change_service_config', 'create_service', 'read_section', 'download_file_to_cache', 'set_thread_context', 'create_interface', 'enum_types', 'enum_subtypes', 'enum_items', 'vm_read', 'delete_share', 'logon_as_user', 'load_driver', 'enum_handles', 'create_mailslot', 'create_process_nt', 'exit_windows', 'get_host_by_addr', 'accept_socket', 'com_createole_object', 'set_system_time', 'delete_service', 'unload_driver', 'read_section_names', 'vm_mapviewofsection', 'enum_user', 'get_userinfo', 'enum_services']

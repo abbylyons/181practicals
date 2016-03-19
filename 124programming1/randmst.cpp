@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
             runtime += (double) t;
         }
 
-        std::cout << total_cost/numtrials << " " << numpoints << " " 
+        std::cout << total_cost/numtrials << " " << numpoints << " "
                   << numtrials << " " << dimension  << std::endl;
         std::cout << "Runtime: " << runtime/(numtrials * CLOCKS_PER_SEC) << std::endl;
         std::cout << "------------" << std::endl;

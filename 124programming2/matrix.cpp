@@ -9,26 +9,30 @@
 
 Scanner::Scanner(int* matrix, bool isRowMajor, unsigned int originalWidth,
 unsigned int originalHeight, unsigned int width, unsigned int height)
+  :m_isRowMajor(isRowMajor),
+  m_matrix(matrix),
+  m_originalWidth(originalWidth),
+  m_originalHeight(originalHeight),
+  m_col(0),
+  m_row(0),
+  m_width(width),
+  m_height(height)
 {
-  m_isRowMajor = isRowMajor;
-  m_matrix = matrix;
-  m_width = width;
-  m_height = height;
-  m_originalWidth = originalWidth;
-  m_originalHeight = originalHeight;
-  m_col = 0;
-  m_row = 0;
+
 }
 
-int Scanner::current()
+void Scanner::goHome()
 {
-  return *m_matrix;
+  this->startCurrentRow();
+  this->startCurrentColumn();
 }
 
-int* Scanner::offset()
+void Scanner::freeData()
 {
-  return m_matrix;
+  this->goHome();
+  free(this->offset());
 }
+
 
 int Scanner::nextInRow()
 {
@@ -107,4 +111,30 @@ void Scanner::startNextRow()
     m_row += 1;
     m_col = 0;
   }
+}
+
+void Scanner::startCurrentColumn()
+{
+  if (m_isRowMajor)
+  {
+    m_matrix -= m_row * m_originalWidth;
+  }
+  else
+  {
+    m_matrix -= m_row;
+  }
+  m_row = 0;
+}
+
+void Scanner::startCurrentRow()
+{
+  if (m_isRowMajor)
+  {
+    m_matrix -= m_col;
+  }
+  else
+  {
+    m_matrix -= m_col * m_originalHeight;
+  }
+  m_col = 0;
 }

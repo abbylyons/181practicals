@@ -81,7 +81,7 @@ void Scanner::startNextColumn()
   {
     if (m_isRowMajor)
     {
-      m_matrix -= m_row * m_originalWidth + 1;
+      m_matrix -= m_row * m_originalWidth - 1;
     }
     else
     {

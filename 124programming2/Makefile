@@ -4,10 +4,10 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 OBJS = matrix.cpp scannerTest.cpp
 
-all: randmst
+all: strassen
 
-randmst : $(OBJS)
-	$(CC) $(LFLAGS) $(OBJS) -o randmst
+strassen : $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o strassen
 
 clean:
-	-rm randmst
+	-rm strassen

@@ -29,19 +29,18 @@ int main(void)
   Scanner S = Scanner(data, true, 5, 4, 5, 4);
 
   S.startNextRow();
-  S.startNextColumn();
+  S.nextInRow();
   int * temp = S.offset();
-  S = scanner(temp, true, 5, 4, 4, 3);
-  std::cout << S.current() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
-  std::cout << S.nextInColumn() << std::endl;
-  std::cout << S.startNextRow() << std::endl;
-  std::cout << S.current() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
-  std::cout << S.nextInRow() << std::endl;
+  S = Scanner(temp, true, 5, 4, 3, 2);
+  std::cout << S.current() << std::endl; // 6
+  std::cout << S.nextInRow() << std::endl; // 7
+  std::cout << S.nextInColumn() << std::endl; // 12
+  S.startNextColumn();
+  std::cout << S.current() << std::endl; // 8
+  S.startNextRow();
+  std::cout << S.nextInRow() << std::endl; // 12
+  std::cout << S.nextInRow() << std::endl; // 13
+
 
   std::cout << "columns" << std::endl;
   data[0] = 0;

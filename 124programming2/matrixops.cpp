@@ -13,7 +13,7 @@ Scanner conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
-    return 1;
+    throw "malloc error";
   }
   memset(newdata, 0, sizeof(int) * len);
   if (outColMajor)
@@ -72,7 +72,7 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
-    return 1;
+    throw "malloc error";
   }
   if (outColMajor)
   {

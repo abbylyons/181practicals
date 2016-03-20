@@ -2,7 +2,7 @@ CC = g++
 DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
-OBJS = matrix.cpp strassen.cpp
+OBJS = scanner.cpp matrixops.cpp strassen.cpp
 
 all: strassen
 

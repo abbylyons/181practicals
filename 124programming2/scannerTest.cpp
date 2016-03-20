@@ -5,6 +5,11 @@
 int main(void)
 {
   int * data = (int *) malloc(sizeof(int) * 20);
+  if(data == NULL)
+  {
+    std::cout << "error allocating memory" << std::endl;
+    return 1;
+  }
   data[0] = 0;
   data[1] = 1;
   data[2] = 2;

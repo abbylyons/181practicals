@@ -21,6 +21,7 @@ class Scanner
     void startCurrentColumn();
     void startCurrentRow();
     void goHome();
+    inline bool isRowMajor() const;
     inline int current() const;
     inline int* offset() const;
     inline unsigned int getWidth() const;
@@ -36,6 +37,11 @@ class Scanner
     unsigned int m_row;
     unsigned int m_width;
     unsigned int m_height;
+};
+
+inline bool Scanner::isRowMajor() const
+{
+  return m_isRowMajor;
 };
 
 inline unsigned int Scanner::getHeight() const

@@ -7,6 +7,19 @@
 #include <time.h>
 #include <utility>
 
+Scanner::Scanner()
+  :m_isRowMajor(true),
+  m_matrix(NULL),
+  m_originalWidth(0),
+  m_originalHeight(0),
+  m_col(0),
+  m_row(0),
+  m_width(0),
+  m_height(0)
+{
+
+}
+
 Scanner::Scanner(int* matrix, bool isRowMajor, unsigned int originalWidth,
 unsigned int originalHeight, unsigned int width, unsigned int height)
   :m_isRowMajor(isRowMajor),
@@ -20,19 +33,6 @@ unsigned int originalHeight, unsigned int width, unsigned int height)
 {
 
 }
-
-void Scanner::goHome()
-{
-  this->startCurrentRow();
-  this->startCurrentColumn();
-}
-
-void Scanner::freeData()
-{
-  this->goHome();
-  free(this->offset());
-}
-
 
 int Scanner::nextInRow()
 {
@@ -78,6 +78,11 @@ int Scanner::nextInColumn()
   }
 }
 
+void Scanner::goHome()
+{
+  this->startCurrentRow();
+  this->startCurrentColumn();
+}
 
 void Scanner::startNextColumn()
 {
@@ -137,4 +142,34 @@ void Scanner::startCurrentRow()
     m_matrix -= m_col * m_originalHeight;
   }
   m_col = 0;
+}
+
+void Scanner::print()
+{
+  this->goHome();
+  std::cout << "--------------" << std::endl;
+
+  // for (int i = 1; i <= m_width * m_width; ++i)
+  // {
+  //   std::cout << m_matrix[i - 1] << " ";
+  //   if (i % m_width == 0)  std::cout << std::endl;
+  // }
+
+  for (int i = 0; i < m_width; ++i)
+  {
+    for (int j = 0; j < m_width; ++j)
+    {
+      std::cout << this->current() << " ";
+      this->nextInRow();
+    }
+    std::cout << std::endl;
+    this->startNextRow();
+  }
+  this->goHome();
+}
+
+void Scanner::freeData()
+{
+  this->goHome();
+  if (this->offset() != NULL)  free(this->offset());
 }

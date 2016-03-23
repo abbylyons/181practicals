@@ -2,6 +2,8 @@
 
 #include "matrixops.h"
 
+#define CROSSOVER 2
+
 // multiply 2 square matrices using traditional method
 Scanner conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
 {
@@ -68,7 +70,7 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
   unsigned int dim = A.getHeight();
 
   // allocate memory for output matix
-  int * newdata = (int *) malloc(sizeof(int) * dim*dim);
+  int * newdata = (int *) malloc(sizeof(int) * dim * dim);
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -76,11 +78,11 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
   }
   if (outColMajor)
   {
-    for (unsigned int i = 0; i < dim; i ++)
+    for (unsigned int i = 0; i < dim; i++)
     {
-      for (unsigned int j = 0; j < dim; j ++)
+      for (unsigned int j = 0; j < dim; j++)
       {
-        newdata[i*dim+j] = A.current() + B.current();
+        newdata[i * dim + j] = A.current() + B.current();
         A.nextInColumn();
         B.nextInColumn();
       }
@@ -91,9 +93,9 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
   }
   else
   {
-    for (unsigned int i = 0; i < dim; i ++)
+    for (unsigned int i = 0; i < dim; i++)
     {
-      for (unsigned int j = 0; j < dim; j ++)
+      for (unsigned int j = 0; j < dim; j++)
       {
         newdata[i*dim+j] = A.current() + B.current();
         A.nextInRow();
@@ -155,6 +157,11 @@ Scanner subtractMatrices(Scanner A, Scanner B, bool outColMajor)
 
 Scanner strassens(Scanner A, Scanner B)
 {
+  A.goHome();
+  B.goHome();
+  std::cout << "New strassens" << std::endl;
+  A.print();
+  B.print();
   unsigned int A_height = A.getHeight();
   unsigned int A_width = A.getWidth();
   unsigned int B_height = B.getHeight();
@@ -164,53 +171,114 @@ Scanner strassens(Scanner A, Scanner B)
   int* A_offset = A.offset();
   int* B_offset = B.offset();
   Scanner A11 = Scanner(A_offset, A_type, A_width, A_height, A_width/2, A_height/2);
-  Scanner A12;
-  Scanner A21;
-  Scanner A22;
+  Scanner A12 = Scanner();
+  Scanner A21 = Scanner();
+  Scanner A22 = Scanner();
   Scanner B11 = Scanner(B_offset, B_type, B_width, B_height, B_width/2, B_height/2);
-  Scanner B12;
-  Scanner B21;
-  Scanner B22;
+  Scanner B12 = Scanner();
+  Scanner B21 = Scanner();
+  Scanner B22 = Scanner();
   if (A_type)
   {
-    A12 = Scanner(A_offset + A_width*A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
-    A21 = Scanner(A_offset + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
+    A21 = Scanner(A_offset + A_width*A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
+    A12 = Scanner(A_offset + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
     A22 = Scanner(A_offset + A_width*(A_height/2) + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
   }
   else
   {
-    A12 = Scanner(A_offset + A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
-    A21 = Scanner(A_offset + A_height*A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
+    A21 = Scanner(A_offset + A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
+    A12 = Scanner(A_offset + A_height*A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
     A22 = Scanner(A_offset + A_height*(A_width/2) + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
   }
   if (B_type)
   {
-    B12 = Scanner(B_offset + B_width*B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
-    B21 = Scanner(B_offset + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
+    B21 = Scanner(B_offset + B_width*B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
+    B12 = Scanner(B_offset + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
     B22 = Scanner(B_offset + B_width*(B_height/2) + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
   }
   else
   {
-    B12 = Scanner(B_offset + B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
-    B21 = Scanner(B_offset + B_height*B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
+    B21 = Scanner(B_offset + B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
+    B12 = Scanner(B_offset + B_height*B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
     B22 = Scanner(B_offset + B_height*(B_width/2) + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
   }
-  Scanner M1 = strassens(addMatrices(A11, A22, true), addMatrices(B11, B22, false));
-  Scanner M2 = strassens(addMatrices(A21, A22, true), B11);
-  Scanner M3 = strassens(A11, subtractMatrices(B12, B22, false));
-  Scanner M4 = strassens(A22, subtractMatrices(B21, B11, false));
-  Scanner M5 = strassens(addMatrices(A11, A12, true), B22);
-  Scanner M6 = strassens(subtractMatrices(A21, A11, true), addMatrices(B11, B12, false));
-  Scanner M7 = strassens(subtractMatrices(A12, A22), addMatrices(B21, B22, false));
+
+  Scanner M1 = Scanner();
+  Scanner M2 = Scanner();
+  Scanner M3 = Scanner();
+  Scanner M4 = Scanner();
+  Scanner M5 = Scanner();
+  Scanner M6 = Scanner();
+  Scanner M7 = Scanner();
+  if (A_height <= CROSSOVER)
+  {
+    A11.print();
+    A22.print();
+    B11.print();
+    B22.print();
+    M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
+    M2 = conventionalMatrixMult(addMatrices(A21, A22, false), B11, false);
+    M3 = conventionalMatrixMult(A11, subtractMatrices(B12, B22, true), false);
+    M4 = conventionalMatrixMult(A22, subtractMatrices(B21, B11, true), false);
+    M5 = conventionalMatrixMult(addMatrices(A11, A12, false), B22, false);
+    M6 = conventionalMatrixMult(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), false);
+    M7 = conventionalMatrixMult(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), false);
+  }
+  else
+  {
+    M1 = strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true));
+    M2 = strassens(addMatrices(A21, A22, false), B11);
+    M3 = strassens(A11, subtractMatrices(B12, B22, true));
+    M4 = strassens(A22, subtractMatrices(B21, B11, true));
+    M5 = strassens(addMatrices(A11, A12, false), B22);
+    M6 = strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true));
+    M7 = strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true));
+  }
   Scanner C11 = addMatrices(subtractMatrices(addMatrices(M1, M4, false), M5, false), M7, false);
   Scanner C12 = addMatrices(M3, M5, false);
   Scanner C21 = addMatrices(M2, M4, false);
   Scanner C22 = addMatrices(addMatrices(subtractMatrices(M1, M2, false), M3, false), M6, false);
 
-  //TODO: implement a way how to stich C11, C12, C21, C22 together into one matrix.
-  //TODO: add in the cutoff point and switch to conventionalMatrixMult
-  //TODO: free pooling
-  //TODO: destoryers
-  //TODO: Grab your Nutz and scream Fuck the Police
+  M1.print();
+  M2.print();
+  M3.print();
+  M4.print();
+  M5.print();
+  M6.print();
+  M7.print();
+  C11.print();
+  C12.print();
+  C21.print();
+  C22.print();
 
+  int d = C11.getHeight();
+  int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int)) - d;
+  int * offset1 = C11.offset();
+  int * offset2 = C12.offset();
+  for (int i = 0; i < d; ++i)
+  {
+    memcpy(newMatrix, offset1, d * sizeof(int));
+    memcpy(newMatrix + d, offset2, d * sizeof(int));
+    newMatrix += 2 * d;
+    offset1 += d;
+    offset2 += d;
+  }
+  offset1 = C21.offset();
+  offset2 = C22.offset();
+  for (int i = 0; i < d; ++i)
+  {
+    memcpy(newMatrix, offset1, d * sizeof(int));
+    memcpy(newMatrix + d, offset2, d * sizeof(int));
+    newMatrix += 2 * d;
+    offset1 += d;
+    offset2 += d;
+  }
+  newMatrix -= d * d * 4;
+  d *= 2;
+  Scanner X = Scanner(newMatrix, true, d, d, d, d);
+  X.print();
+  return X;
+  //TODO: free pooling
+  //TODO: add padding
+  //TODO: add base case
 }

@@ -134,6 +134,35 @@ int main (int argc, char *argv[])
             F.freeData();
             break;
           }
+          case 2:
+          {
+            int * data = new int[20];
+            for (int i = 0; i < 4; ++i)
+            {
+              for (int j = 0; j < 4; ++j)
+              {
+                data[i * 4 + j] = j;
+              }
+            }
+            Scanner A = Scanner(data, true, 4, 4, 4, 4);
+            Scanner B = Scanner(data, false, 4, 4, 4, 4);
+            Scanner C = strassens(A, B);
+            delete data;
+
+            /*int * data = new int[68];
+            for (int i = 0; i < 8; ++i)
+            {
+              for (int j = 0; j < 8; ++j)
+              {
+                data[i * 8 + j] = j;
+              }
+            }
+            Scanner A = Scanner(data, true, 8, 8, 8, 8);
+            Scanner B = Scanner(data, false, 8, 8, 8, 8);
+            Scanner C = strassens(A, B);
+            C.print();
+            delete data;*/
+          }
         }
     }
 }

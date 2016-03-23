@@ -12,15 +12,17 @@
 class Scanner
 {
   public:
+    Scanner();
     Scanner(int* matrix, bool isRowMajor, unsigned int originalWidth,
       unsigned int originalHeight, unsigned int width, unsigned int height);
     int nextInRow();
     int nextInColumn();
+    void goHome();
     void startNextColumn();
     void startNextRow();
     void startCurrentColumn();
     void startCurrentRow();
-    void goHome();
+    void print();
     inline bool isRowMajor() const;
     inline int current() const;
     inline int* offset() const;

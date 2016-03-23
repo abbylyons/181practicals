@@ -252,7 +252,7 @@ Scanner strassens(Scanner A, Scanner B)
   C22.print();
 
   int d = C11.getHeight();
-  int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int)) - d;
+  int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int));
   int * offset1 = C11.offset();
   int * offset2 = C12.offset();
   for (int i = 0; i < d; ++i)

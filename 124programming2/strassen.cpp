@@ -134,6 +134,7 @@ int main (int argc, char *argv[])
             F.freeData();
             break;
           }
+          // used for testing strassen
           case 2:
           {
             int * data = new int[dimension*dimension+1];
@@ -148,6 +149,48 @@ int main (int argc, char *argv[])
             Scanner B = Scanner(data, false, dimension, dimension, dimension, dimension);
             Scanner C = strassens(A, B);
             delete data;
+          }
+          // used for determining crossover
+          case 3:
+          {
+            int * dataA = new int[dimension*dimension+1];
+            for (unsigned int i = 0; i < dimension; ++i)
+            {
+              for (unsigned int j = 0; j < dimension; ++j)
+              {
+                dataA[i * dimension + j] = rand() % 3 - 1;
+              }
+            }
+            int * dataB = new int[dimension*dimension+1];
+            for (unsigned int i = 0; i < dimension; ++i)
+            {
+              for (unsigned int j = 0; j < dimension; ++j)
+              {
+                dataB[i * dimension + j] = rand() % 3 - 1;
+              }
+            }
+
+            Scanner A = Scanner(dataA, true, dimension, dimension, dimension, dimension);
+            Scanner B = Scanner(dataB, false, dimension, dimension, dimension, dimension);
+            double prevTime = -1;
+            unsigned int bestPoint = 2;
+            while (bestPoint < dimension)
+            {
+              double runtime = 0;
+              clock_t t = clock();
+              strassens(A, B, bestPoint);
+              runtime = (double) clock() - t;
+              if (prevTime != -1 && prevTime < runtime)
+              {
+                std::cout << "Best crossover: " << bestPoint - 1 << std::endl;
+                return 0;
+              }
+              else
+              {
+                prevTime = runtime;
+                ++bestPoint;
+              }
+            }
           }
         }
     }

@@ -2,7 +2,6 @@
 
 #include "matrixops.h"
 
-#define CROSSOVER 4
 
 // multiply 2 square matrices using traditional method
 Scanner conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
@@ -155,7 +154,7 @@ Scanner subtractMatrices(Scanner A, Scanner B, bool outColMajor)
   return Scanner(newdata, true, dim, dim, dim, dim);
 }
 
-Scanner strassens(Scanner A, Scanner B)
+Scanner strassens(Scanner A, Scanner B, unsigned int crossover)
 {
   A.goHome();
   B.goHome();
@@ -215,7 +214,7 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner M5 = Scanner();
   Scanner M6 = Scanner();
   Scanner M7 = Scanner();
-  if (A_height <= CROSSOVER)
+  if (A_height <= crossover)
   {
     M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
     M2 = conventionalMatrixMult(addMatrices(A21, A22, false), B11, false);
@@ -227,13 +226,13 @@ Scanner strassens(Scanner A, Scanner B)
   }
   else
   {
-    M1 = strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true));
-    M2 = strassens(addMatrices(A21, A22, false), B11);
-    M3 = strassens(A11, subtractMatrices(B12, B22, true));
-    M4 = strassens(A22, subtractMatrices(B21, B11, true));
-    M5 = strassens(addMatrices(A11, A12, false), B22);
-    M6 = strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true));
-    M7 = strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true));
+    M1 = strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true), crossover);
+    M2 = strassens(addMatrices(A21, A22, false), B11, crossover);
+    M3 = strassens(A11, subtractMatrices(B12, B22, true), crossover);
+    M4 = strassens(A22, subtractMatrices(B21, B11, true), crossover);
+    M5 = strassens(addMatrices(A11, A12, false), B22, crossover);
+    M6 = strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), crossover);
+    M7 = strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), crossover);
   }
   Scanner C11 = addMatrices(subtractMatrices(addMatrices(M1, M4, false), M5, false), M7, false);
   Scanner C12 = addMatrices(M3, M5, false);
@@ -265,7 +264,6 @@ Scanner strassens(Scanner A, Scanner B)
   newMatrix -= d * d * 4;
   d *= 2;
   Scanner X = Scanner(newMatrix, true, d, d, d, d);
-  X.print();
   return X;
   //TODO: free pooling
   //TODO: add padding

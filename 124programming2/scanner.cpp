@@ -148,16 +148,9 @@ void Scanner::print()
 {
   this->goHome();
   std::cout << "--------------" << std::endl;
-
-  // for (int i = 1; i <= m_width * m_width; ++i)
-  // {
-  //   std::cout << m_matrix[i - 1] << " ";
-  //   if (i % m_width == 0)  std::cout << std::endl;
-  // }
-
-  for (int i = 0; i < m_width; ++i)
+  for (unsigned int i = 0; i < m_width; ++i)
   {
-    for (int j = 0; j < m_width; ++j)
+    for (unsigned int j = 0; j < m_width; ++j)
     {
       std::cout << this->current() << " ";
       this->nextInRow();

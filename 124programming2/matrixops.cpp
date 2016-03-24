@@ -161,9 +161,7 @@ Scanner strassens(Scanner A, Scanner B)
   B.goHome();
   std::cout << "New strassens" << std::endl;
   A.print();
-  std::cout << (A.isRowMajor() ? "row major" : "col major") << std::endl;
   B.print();
-  std::cout << (B.isRowMajor() ? "row major" : "col major") << std::endl;
   unsigned int A_height = A.getHeight();
   unsigned int A_width = A.getWidth();
   unsigned int B_height = B.getHeight();
@@ -222,14 +220,14 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner M7 = Scanner();
   if (A_height <= CROSSOVER)
   {
-    A11.print();
-    A12.print();
-    A21.print(); // fix
-    A22.print(); // fix
-    B11.print();
-    B12.print(); // fix
-    B21.print();
-    B22.print(); // fix
+    // A11.print();
+    // A12.print();
+    // A21.print();
+    // A22.print();
+    // B11.print();
+    // B12.print();
+    // B21.print();
+    // B22.print();
     M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
     M2 = conventionalMatrixMult(addMatrices(A21, A22, false), B11, false);
     M3 = conventionalMatrixMult(A11, subtractMatrices(B12, B22, true), false);
@@ -253,17 +251,17 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner C21 = addMatrices(M2, M4, false);
   Scanner C22 = addMatrices(addMatrices(subtractMatrices(M1, M2, false), M3, false), M6, false);
 
-  M1.print();
-  M2.print();
-  M3.print();
-  M4.print();
-  M5.print();
-  M6.print();
-  M7.print();
-  C11.print();
-  C12.print();
-  C21.print();
-  C22.print();
+  // M1.print();
+  // M2.print();
+  // M3.print();
+  // M4.print();
+  // M5.print();
+  // M6.print();
+  // M7.print();
+  // C11.print();
+  // C12.print();
+  // C21.print();
+  // C22.print();
 
   int d = C11.getHeight();
   int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int));
@@ -292,7 +290,4 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner X = Scanner(newMatrix, true, d, d, d, d);
   X.print();
   return X;
-  //TODO: free pooling
-  //TODO: add padding
-  //TODO: add base case
 }

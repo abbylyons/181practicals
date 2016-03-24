@@ -11,6 +11,11 @@ MatrixOps::MatrixOps()
 
 MatrixOps::~MatrixOps()
 {
+  unload();
+}
+
+void MatrixOps::unload()
+{
   while (m_data != NULL)
   {
     node * temp = m_data;
@@ -18,6 +23,7 @@ MatrixOps::~MatrixOps()
     free(temp->matrix);
     free(temp);
   }
+  m_data = NULL;
 }
 
 // multiply 2 square matrices using traditional method
@@ -30,8 +36,8 @@ Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor
   int * newdata = (int *) malloc(sizeof(int) * len);
   node * newNode = (node *) malloc(sizeof(node));
   newNode->matrix = newdata;
-  newNode->next = NULL;
-  m_data->next = newNode;
+  newNode->next = m_data;
+  m_data = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;

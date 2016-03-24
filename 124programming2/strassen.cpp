@@ -92,27 +92,23 @@ int main (int argc, char *argv[])
 
             Scanner A = Scanner(dataA, true, dimension, dimension, dimension, dimension);
             Scanner B = Scanner(dataB, false, dimension, dimension, dimension, dimension);
-            double prevTime = -1;
-            unsigned int bestPoint = 2;
-            while (bestPoint < dimension)
+            int prevTime = INT_MAX;
+            unsigned int bestPoint = -1;
+            unsigned int crossPoint = 2;
+            while (crossPoint < dimension)
             {
               double runtime = 0;
               clock_t t = clock();
-              matmath.strassens(A, B, bestPoint);
+              matmath.strassens(A, B, crossPoint);
+              matmath.unload();
               runtime = (double) clock() - t;
-              if (prevTime != -1 && prevTime < runtime)
+              if (prevTime > runtime)
               {
-                std::cout << "Best crossover: " << bestPoint - 1 << std::endl;
-                free(dataA);
-                free(dataB);
-                return 0;
+                bestPoint = crossPoint;
               }
-              else
-              {
-                prevTime = runtime;
-                ++bestPoint;
-              }
+              crossPoint *= 2;
             }
+            std::cout << "Crossover point: " << bestPoint << std::endl;
             free(dataA);
             free(dataB);
             return 1;

@@ -136,42 +136,18 @@ int main (int argc, char *argv[])
           }
           case 2:
           {
-            int * data = new int[20];
-            for (int i = 0; i < 4; ++i)
+            int * data = new int[dimension*dimension+1];
+            for (unsigned int i = 0; i < dimension; ++i)
             {
-              for (int j = 0; j < 4; ++j)
+              for (unsigned int j = 0; j < dimension; ++j)
               {
-                data[i * 4 + j] = j;
+                data[i * dimension + j] = j;
               }
             }
-            Scanner A = Scanner(data, true, 4, 4, 4, 4);
-            Scanner B = Scanner(data, false, 4, 4, 4, 4);
+            Scanner A = Scanner(data, true, dimension, dimension, dimension, dimension);
+            Scanner B = Scanner(data, false, dimension, dimension, dimension, dimension);
             Scanner C = strassens(A, B);
             delete data;
-
-            // int data[4];
-            // data[0] = 0;
-            // data[1] = 1;
-            // data[2] = 0;
-            // data[3] = 1;
-            // Scanner A = Scanner(data, false, 2, 2, 2, 2);
-            // Scanner C = strassens(A, A);
-
-            // 
-
-            /*int * data = new int[68];
-            for (int i = 0; i < 8; ++i)
-            {
-              for (int j = 0; j < 8; ++j)
-              {
-                data[i * 8 + j] = j;
-              }
-            }
-            Scanner A = Scanner(data, true, 8, 8, 8, 8);
-            Scanner B = Scanner(data, false, 8, 8, 8, 8);
-            Scanner C = strassens(A, B);
-            C.print();
-            delete data;*/
           }
         }
     }

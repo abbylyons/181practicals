@@ -60,12 +60,12 @@ inline unsigned int Scanner::getWidth() const
 
 inline unsigned int Scanner::getOriginalHeight() const
 {
-    return m_originalheight;
+    return m_originalHeight;
 };
 
 inline unsigned int Scanner::getOriginalWidth() const
 {
-    return m_originalwidth;
+    return m_originalWidth;
 };
 
 inline int Scanner::current() const

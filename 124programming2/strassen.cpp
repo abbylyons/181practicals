@@ -148,7 +148,7 @@ int main (int argc, char *argv[])
             Scanner B = Scanner(data, false, 4, 4, 4, 4);
             Scanner C = strassens(A, B);
             delete data;
-            
+
             // int data[4];
             // data[0] = 0;
             // data[1] = 1;

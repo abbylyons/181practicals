@@ -161,7 +161,9 @@ Scanner strassens(Scanner A, Scanner B)
   B.goHome();
   std::cout << "New strassens" << std::endl;
   A.print();
+  std::cout << (A.isRowMajor() ? "row major" : "col major") << std::endl;
   B.print();
+  std::cout << (B.isRowMajor() ? "row major" : "col major") << std::endl;
   unsigned int A_height = A.getHeight();
   unsigned int A_width = A.getWidth();
   unsigned int B_height = B.getHeight();
@@ -181,29 +183,29 @@ Scanner strassens(Scanner A, Scanner B)
   if (A_type)
   {
     A11 = Scanner(A_offset, A_type, A_width, A_height, A_width/2, A_height/2);
-    A21 = Scanner(A_offset + A_width*A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
     A12 = Scanner(A_offset + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
+    A21 = Scanner(A_offset + A_width*A_height/2, A_type, A_width, A_height, A_width/2, A_height/2);
     A22 = Scanner(A_offset + A_width*(A_height/2) + A_width/2, A_type, A_width, A_height, A_width/2, A_height/2);
   }
   else
   {
     A11 = Scanner(A_offset, !A_type, A_width, A_height, A_width/2, A_height/2);
-    A21 = Scanner(A_offset + A_height/2, !A_type, A_width, A_height, A_width/2, A_height/2);
     A12 = Scanner(A_offset + A_height*A_width/2, !A_type, A_width, A_height, A_width/2, A_height/2);
+    A21 = Scanner(A_offset + A_height/2, !A_type, A_width, A_height, A_width/2, A_height/2);
     A22 = Scanner(A_offset + A_height*(A_width/2) + A_width/2, !A_type, A_width, A_height, A_width/2, A_height/2);
   }
   if (B_type)
   {
     B11 = Scanner(B_offset, B_type, B_width, B_height, B_width/2, B_height/2);
-    B21 = Scanner(B_offset + B_width*B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
     B12 = Scanner(B_offset + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
+    B21 = Scanner(B_offset + B_width*B_height/2, B_type, B_width, B_height, B_width/2, B_height/2);
     B22 = Scanner(B_offset + B_width*(B_height/2) + B_width/2, B_type, B_width, B_height, B_width/2, B_height/2);
   }
   else
   {
     B11 = Scanner(B_offset, !B_type, B_width, B_height, B_width/2, B_height/2);
-    B21 = Scanner(B_offset + B_height/2, !B_type, B_width, B_height, B_width/2, B_height/2);
     B12 = Scanner(B_offset + B_height*B_width/2, !B_type, B_width, B_height, B_width/2, B_height/2);
+    B21 = Scanner(B_offset + B_height/2, !B_type, B_width, B_height, B_width/2, B_height/2);
     B22 = Scanner(B_offset + B_height*(B_width/2) + B_width/2, !B_type, B_width, B_height, B_width/2, B_height/2);
   }
 
@@ -217,21 +219,13 @@ Scanner strassens(Scanner A, Scanner B)
   if (A_height <= CROSSOVER)
   {
     A11.print();
-    std::cout << A11.getWidth() << std::endl;
     A12.print();
-    std::cout << A12.getWidth() << std::endl;
     A21.print(); // fix
-    std::cout << A21.getWidth() << std::endl;
     A22.print(); // fix
-    std::cout << A22.getWidth() << std::endl;
     B11.print();
-    std::cout << B11.getWidth() << std::endl;
-    B12.print(); // fix
-    std::cout << B12.getWidth() << std::endl;
-    B21.print();
-    std::cout << B21.getWidth() << std::endl;
+    B12.print();
+    B21.print(); // fix
     B22.print(); // fix
-    std::cout << B22.getWidth() << std::endl;
     M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
     M2 = conventionalMatrixMult(addMatrices(A21, A22, false), B11, false);
     M3 = conventionalMatrixMult(A11, subtractMatrices(B12, B22, true), false);

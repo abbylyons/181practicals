@@ -28,6 +28,8 @@ class Scanner
     inline int* offset() const;
     inline unsigned int getWidth() const;
     inline unsigned int getHeight() const;
+    inline unsigned int getOriginalWidth() const;
+    inline unsigned int getOriginalHeight() const;
     void freeData();
 
   private:
@@ -54,6 +56,16 @@ inline unsigned int Scanner::getHeight() const
 inline unsigned int Scanner::getWidth() const
 {
     return m_width;
+};
+
+inline unsigned int Scanner::getOriginalHeight() const
+{
+    return m_originalheight;
+};
+
+inline unsigned int Scanner::getOriginalWidth() const
+{
+    return m_originalwidth;
 };
 
 inline int Scanner::current() const

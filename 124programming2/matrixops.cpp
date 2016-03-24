@@ -93,8 +93,8 @@ Scanner MatrixOps::addMatrices(Scanner A, Scanner B, bool outColMajor)
   int * newdata = (int *) malloc(sizeof(int) * dim * dim);
   node * newNode = (node *) malloc(sizeof(node));
   newNode->matrix = newdata;
-  newNode->next = NULL;
-  m_data->next = newNode;
+  newNode->next = m_data;
+  m_data = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -144,8 +144,8 @@ Scanner MatrixOps::subtractMatrices(Scanner A, Scanner B, bool outColMajor)
   int * newdata = (int *) malloc(sizeof(int) * dim*dim);
   node * newNode = (node *) malloc(sizeof(node));
   newNode->matrix = newdata;
-  newNode->next = NULL;
-  m_data->next = newNode;
+  newNode->next = m_data;
+  m_data = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -272,8 +272,8 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
   int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int));
   node * newNode = (node *) malloc(sizeof(node));
   newNode->matrix = newMatrix;
-  newNode->next = NULL;
-  m_data->next = newNode;
+  newNode->next = m_data;
+  m_data = newNode;
   int * offset1 = C11.offset();
   int * offset2 = C12.offset();
   for (int i = 0; i < d; ++i)

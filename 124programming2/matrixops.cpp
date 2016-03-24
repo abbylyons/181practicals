@@ -3,14 +3,35 @@
 #include "matrixops.h"
 
 
+MatrixOps::MatrixOps()
+  : m_data(NULL)
+{
+
+}
+
+MatrixOps::~MatrixOps()
+{
+  while (m_data != NULL)
+  {
+    node * temp = m_data;
+    m_data = m_data->next;
+    free(temp->matrix);
+    free(temp);
+  }
+}
+
 // multiply 2 square matrices using traditional method
-Scanner conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
+Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
 {
   A.goHome();
   B.goHome();
   unsigned int dim = A.getHeight();
   unsigned int len = dim*dim;
   int * newdata = (int *) malloc(sizeof(int) * len);
+  node * newNode = (node *) malloc(sizeof(node));
+  newNode->matrix = newdata;
+  newNode->next = NULL;
+  m_data->next = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -61,7 +82,7 @@ Scanner conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor)
 
 
 // add 2 square matrices
-Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
+Scanner MatrixOps::addMatrices(Scanner A, Scanner B, bool outColMajor)
 {
   // send the scanner in input matrices home
   A.goHome();
@@ -70,6 +91,10 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
 
   // allocate memory for output matix
   int * newdata = (int *) malloc(sizeof(int) * dim * dim);
+  node * newNode = (node *) malloc(sizeof(node));
+  newNode->matrix = newdata;
+  newNode->next = NULL;
+  m_data->next = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -108,7 +133,7 @@ Scanner addMatrices(Scanner A, Scanner B, bool outColMajor)
 }
 
 // subtract 2 square matrices
-Scanner subtractMatrices(Scanner A, Scanner B, bool outColMajor)
+Scanner MatrixOps::subtractMatrices(Scanner A, Scanner B, bool outColMajor)
 {
   // send the scanner in input matrices home
   A.goHome();
@@ -117,6 +142,10 @@ Scanner subtractMatrices(Scanner A, Scanner B, bool outColMajor)
 
   // allocate memory for output matix
   int * newdata = (int *) malloc(sizeof(int) * dim*dim);
+  node * newNode = (node *) malloc(sizeof(node));
+  newNode->matrix = newdata;
+  newNode->next = NULL;
+  m_data->next = newNode;
   if(newdata == NULL)
   {
     std::cout << "error allocating memory" << std::endl;
@@ -154,7 +183,7 @@ Scanner subtractMatrices(Scanner A, Scanner B, bool outColMajor)
   return Scanner(newdata, true, dim, dim, dim, dim);
 }
 
-Scanner strassens(Scanner A, Scanner B, unsigned int crossover)
+Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
 {
   A.goHome();
   B.goHome();
@@ -241,6 +270,10 @@ Scanner strassens(Scanner A, Scanner B, unsigned int crossover)
 
   int d = C11.getHeight();
   int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int));
+  node * newNode = (node *) malloc(sizeof(node));
+  newNode->matrix = newMatrix;
+  newNode->next = NULL;
+  m_data->next = newNode;
   int * offset1 = C11.offset();
   int * offset2 = C12.offset();
   for (int i = 0; i < d; ++i)
@@ -265,7 +298,4 @@ Scanner strassens(Scanner A, Scanner B, unsigned int crossover)
   d *= 2;
   Scanner X = Scanner(newMatrix, true, d, d, d, d);
   return X;
-  //TODO: free pooling
-  //TODO: add padding
-  //TODO: add base case
 }

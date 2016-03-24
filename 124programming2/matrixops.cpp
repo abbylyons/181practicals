@@ -113,8 +113,11 @@ Scanner MatrixOps::addMatrices(Scanner A, Scanner B, bool outColMajor)
       for (unsigned int j = 0; j < dim; j++)
       {
         newdata[i * dim + j] = A.current() + B.current();
-        A.nextInColumn();
-        B.nextInColumn();
+        if (j < dim-1)
+        {
+          A.nextInColumn();
+          B.nextInColumn();
+        }
       }
       A.startNextColumn();
       B.startNextColumn();
@@ -128,8 +131,11 @@ Scanner MatrixOps::addMatrices(Scanner A, Scanner B, bool outColMajor)
       for (unsigned int j = 0; j < dim; j++)
       {
         newdata[i*dim+j] = A.current() + B.current();
-        A.nextInRow();
-        B.nextInRow();
+        if (j < dim-1)
+        {
+          A.nextInRow();
+          B.nextInRow();
+        }
       }
       A.startNextRow();
       B.startNextRow();
@@ -164,8 +170,11 @@ Scanner MatrixOps::subtractMatrices(Scanner A, Scanner B, bool outColMajor)
       for (unsigned int j = 0; j < dim; j ++)
       {
         newdata[i*dim+j] = A.current() - B.current();
-        A.nextInColumn();
-        B.nextInColumn();
+        if (j < dim-1)
+        {
+          A.nextInColumn();
+          B.nextInColumn();
+        }
       }
       A.startNextColumn();
       B.startNextColumn();
@@ -179,8 +188,11 @@ Scanner MatrixOps::subtractMatrices(Scanner A, Scanner B, bool outColMajor)
       for (unsigned int j = 0; j < dim; j ++)
       {
         newdata[i*dim+j] = A.current() - B.current();
-        A.nextInRow();
-        B.nextInRow();
+        if (j < dim-1)
+        {
+          A.nextInRow();
+          B.nextInRow();
+        }
       }
       A.startNextRow();
       B.startNextRow();

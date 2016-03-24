@@ -161,7 +161,9 @@ Scanner strassens(Scanner A, Scanner B)
   B.goHome();
   std::cout << "New strassens" << std::endl;
   A.print();
+  std::cout << (A.isRowMajor() ? "row major" : "col major") << std::endl;
   B.print();
+  std::cout << (B.isRowMajor() ? "row major" : "col major") << std::endl;
   unsigned int A_height = A.getHeight();
   unsigned int A_width = A.getWidth();
   unsigned int B_height = B.getHeight();
@@ -184,6 +186,7 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner B22 = Scanner();
   if (A_type)
   {
+<<<<<<< HEAD
     A11 = Scanner(A_offset, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
     A21 = Scanner(A_offset + A_originalWidth*A_originalHeight/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
     A12 = Scanner(A_offset + A_originalWidth/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);

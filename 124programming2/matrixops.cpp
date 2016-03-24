@@ -186,7 +186,6 @@ Scanner strassens(Scanner A, Scanner B)
   Scanner B22 = Scanner();
   if (A_type)
   {
-<<<<<<< HEAD
     A11 = Scanner(A_offset, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
     A21 = Scanner(A_offset + A_originalWidth*A_originalHeight/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
     A12 = Scanner(A_offset + A_originalWidth/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
@@ -194,10 +193,10 @@ Scanner strassens(Scanner A, Scanner B)
   }
   else
   {
-    A11 = Scanner(A_offset, !A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
-    A21 = Scanner(A_offset + A_originalHeight/2, !A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
-    A12 = Scanner(A_offset + A_originalHeight*A_originalWidth/2, !A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
-    A22 = Scanner(A_offset + A_originalHeight*(A_originalWidth/2) + A_originalWidth/2, !A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
+    A11 = Scanner(A_offset, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
+    A21 = Scanner(A_offset + A_originalHeight/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
+    A12 = Scanner(A_offset + A_originalHeight*A_originalWidth/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
+    A22 = Scanner(A_offset + A_originalHeight*(A_originalWidth/2) + A_originalWidth/2, A_type, A_originalWidth, A_originalHeight, A_width/2, A_height/2);
   }
   if (B_type)
   {
@@ -208,10 +207,10 @@ Scanner strassens(Scanner A, Scanner B)
   }
   else
   {
-    B11 = Scanner(B_offset, !B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
-    B21 = Scanner(B_offset + B_originalHeight/2, !B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
-    B12 = Scanner(B_offset + B_originalHeight*B_originalWidth/2, !B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
-    B22 = Scanner(B_offset + B_originalHeight*(B_originalWidth/2) + B_originalWidth/2, !B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
+    B11 = Scanner(B_offset, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
+    B21 = Scanner(B_offset + B_originalHeight/2, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
+    B12 = Scanner(B_offset + B_originalHeight*B_originalWidth/2, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
+    B22 = Scanner(B_offset + B_originalHeight*(B_originalWidth/2) + B_originalWidth/2, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
   }
 
   Scanner M1 = Scanner();

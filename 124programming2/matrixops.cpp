@@ -47,8 +47,11 @@ Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor
         for (unsigned int i = 0; i < dim; i++)
         {
           newdata[col*dim + row] += A.current() * B.current();
-          A.nextInRow();
-          B.nextInColumn();
+          if (i < dim-1)
+          {
+            A.nextInRow();
+            B.nextInColumn();
+          }
         }
         A.startNextRow();
         B.startCurrentColumn();
@@ -67,8 +70,11 @@ Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor
         for (unsigned int i = 0; i < dim; i++)
         {
           newdata[row*dim + col] += A.current() * B.current();
-          A.nextInRow();
-          B.nextInColumn();
+          if (i < dim-1)
+          {
+            A.nextInRow();
+            B.nextInColumn();
+          }
         }
         A.startNextRow();
         B.startCurrentColumn();

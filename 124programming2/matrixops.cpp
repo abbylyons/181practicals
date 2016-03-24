@@ -2,7 +2,6 @@
 
 #include "matrixops.h"
 
-
 MatrixOps::MatrixOps()
   : m_data(NULL)
 {
@@ -267,6 +266,13 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
   Scanner M5 = Scanner();
   Scanner M6 = Scanner();
   Scanner M7 = Scanner();
+  MatrixOps m1 = MatrixOps();
+  MatrixOps m2 = MatrixOps();
+  MatrixOps m3 = MatrixOps();
+  MatrixOps m4 = MatrixOps();
+  MatrixOps m5 = MatrixOps();
+  MatrixOps m6 = MatrixOps();
+  MatrixOps m7 = MatrixOps();
   if (A_height <= crossover)
   {
     M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
@@ -279,18 +285,25 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
   }
   else
   {
-    M1 = strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true), crossover);
-    M2 = strassens(addMatrices(A21, A22, false), B11, crossover);
-    M3 = strassens(A11, subtractMatrices(B12, B22, true), crossover);
-    M4 = strassens(A22, subtractMatrices(B21, B11, true), crossover);
-    M5 = strassens(addMatrices(A11, A12, false), B22, crossover);
-    M6 = strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), crossover);
-    M7 = strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), crossover);
+    M1 = m1.strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true), crossover);
+    M2 = m2.strassens(addMatrices(A21, A22, false), B11, crossover);
+    M3 = m3.strassens(A11, subtractMatrices(B12, B22, true), crossover);
+    M4 = m4.strassens(A22, subtractMatrices(B21, B11, true), crossover);
+    M5 = m5.strassens(addMatrices(A11, A12, false), B22, crossover);
+    M6 = m6.strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), crossover);
+    M7 = m7.strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), crossover);
   }
   Scanner C11 = addMatrices(subtractMatrices(addMatrices(M1, M4, false), M5, false), M7, false);
   Scanner C12 = addMatrices(M3, M5, false);
   Scanner C21 = addMatrices(M2, M4, false);
   Scanner C22 = addMatrices(addMatrices(subtractMatrices(M1, M2, false), M3, false), M6, false);
+  m1.unload();
+  m2.unload();
+  m3.unload();
+  m4.unload();
+  m5.unload();
+  m6.unload();
+  m7.unload();
 
   int d = C11.getHeight();
   int * newMatrix = (int *) malloc(d * d * 4 * sizeof(int));

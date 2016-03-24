@@ -1,7 +1,7 @@
 // strassen.cpp
 
 #include "matrixops.h"
-
+#include <float.h>
 
 int main (int argc, char *argv[])
 {
@@ -92,26 +92,70 @@ int main (int argc, char *argv[])
 
             Scanner A = Scanner(dataA, true, dimension, dimension, dimension, dimension);
             Scanner B = Scanner(dataB, false, dimension, dimension, dimension, dimension);
-            int prevTime = INT_MAX;
+            double prevTime = DBL_MAX;
             unsigned int bestPoint = -1;
-            unsigned int crossPoint = 2;
+            unsigned int crossPoint = 8;
             while (crossPoint < dimension)
             {
               double runtime = 0;
               clock_t t = clock();
               matmath.strassens(A, B, crossPoint);
               matmath.unload();
-              runtime = (double) clock() - t;
+              runtime = (double) (clock() - t) / CLOCKS_PER_SEC * 1000;
+              std::cout << "Crosspoint: " << crossPoint << std::endl;
+              std::cout << "Runtime: " << runtime << std::endl;
               if (prevTime > runtime)
               {
                 bestPoint = crossPoint;
+                prevTime = runtime;
               }
               crossPoint *= 2;
             }
-            std::cout << "Crossover point: " << bestPoint << std::endl;
+            std::cout << "Best crossover point: " << bestPoint << std::endl;
             free(dataA);
             free(dataB);
             return 1;
+          }
+          // used for determining average runtime for 3 trials
+          case 2:
+          {
+            MatrixOps matmath = MatrixOps();
+            for (unsigned int i = 2; i <= 4096; i *= 2)
+            {
+              int * dataA = new int[i * i + 1];
+              for (unsigned int j = 0; j < i; ++j)
+              {
+                for (unsigned int k = 0; k < i; ++k)
+                {
+                  dataA[j * i + k] = rand() % 3 - 1;
+                }
+              }
+              int * dataB = new int[i*i+1];
+              for (unsigned int j = 0; j < i; ++j)
+              {
+                for (unsigned int k = 0; k < i; ++k)
+                {
+                  dataB[j * i + k] = rand() % 3 - 1;
+                }
+              }
+              Scanner A = Scanner(dataA, true, i, i, i, i);
+              Scanner B = Scanner(dataB, false, i, i, i, i);
+              double averageTime = 0;
+              for (unsigned int j = 0; j < 3; ++j)
+              {
+                double runtime = 0;
+                clock_t t = clock();
+                matmath.strassens(A, B);
+                matmath.unload();
+                runtime = (double) (clock() - t) / CLOCKS_PER_SEC * 1000 / 3;
+                averageTime += runtime;
+              }
+              std::cout << "Dimension: " << i << std::endl;
+              std::cout << "Average runtime: " << averageTime << std::endl;
+              free(dataA);
+              free(dataB);
+            }
+            return 0;
           }
       }
     }

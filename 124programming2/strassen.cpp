@@ -38,25 +38,29 @@ int main (int argc, char *argv[])
                 std::cout << "error allocating memory" << std::endl;
                 return 1;
               }
-              for (unsigned int i = 0; i < len; i++)
+              for (unsigned int i = 0; i < len; ++i)
               {
                 infile >> line;
                 dataA[i] = atoi(line);
               }
-              for (unsigned int i = 0; i < len; i++)
+              for (unsigned int j = 0; j < dimension; ++j)
               {
-                infile >> line;
-                dataB[i] = atoi(line);
+                for (unsigned int i = 0; i < dimension; ++i)
+                {
+                  infile >> line;
+                  dataB[i*dimension+j] = atoi(line);
+                }
               }
               free(line);
 
               // input matrices to work with
               Scanner matrixA = Scanner(dataA, true, dimension, dimension, dimension, dimension);
               matrixA.print();
-              Scanner matrixB = Scanner(dataB, true, dimension, dimension, dimension, dimension);
+              Scanner matrixB = Scanner(dataB, false, dimension, dimension, dimension, dimension);
               matrixB.print();
               MatrixOps matmath = MatrixOps();
               Scanner matrixC = matmath.strassensWrapper(matrixA, matrixB);
+              matrixC.print();
               std::cout << matrixC.current() << std::endl;
               matrixC.nextInRow();
               for (unsigned int i = 1; i < dimension; i++)

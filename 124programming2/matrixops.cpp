@@ -44,54 +44,35 @@ Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor
     throw "malloc error";
   }
   memset(newdata, 0, sizeof(int) * len);
+
+  for (unsigned int col = 0; col < dim; col++)
+  {
+    for (unsigned int row = 0; row < dim; row++)
+    {
+      int * Bcur = B.offset();
+      int * Acur = A.offset();
+      for (unsigned int i = 0; i < dim; i++)
+      {
+        if (outColMajor)
+        {
+          newdata[col*dim + row] += Bcur[i] * Acur[i];
+        }
+        else
+        {
+          newdata[row*dim + col] += Bcur[i] * Acur[i];
+        }
+      }
+      A.startNextRow();
+    }
+    B.startNextColumn();
+    A.startCurrentColumn();
+  }
   if (outColMajor)
   {
-    for (unsigned int col = 0; col < dim; col++)
-    {
-      for (unsigned int row = 0; row < dim; row++)
-      {
-        for (unsigned int i = 0; i < dim; i++)
-        {
-          newdata[col*dim + row] += A.current() * B.current();
-          if (i < dim-1)
-          {
-            A.nextInRow();
-            B.nextInColumn();
-          }
-        }
-        A.startNextRow();
-        B.startCurrentColumn();
-      }
-      B.startNextColumn();
-      A.startCurrentColumn();
-    }
     return Scanner(newdata, false, dim, dim, dim, dim);
   }
   else
   {
-    for (unsigned int col = 0; col < dim; col++)
-    {
-      for (unsigned int row = 0; row < dim; row++)
-      {
-        for (unsigned int i = 0; i < dim; i++)
-        {
-          std::cout << "Here!" << std::endl;
-          std::cout << A.current() << std::endl;
-          std::cout << B.current() << std::endl;
-          std::cout << "There!" << std::endl;
-          newdata[row*dim + col] += A.current() * B.current();
-          if (i < dim-1)
-          {
-            A.nextInRow();
-            B.nextInColumn();
-          }
-        }
-        A.startNextRow();
-        B.startCurrentColumn();
-      }
-      B.startNextColumn();
-      A.startCurrentColumn();
-    }
     return Scanner(newdata, true, dim, dim, dim, dim);
   }
 }
@@ -233,7 +214,6 @@ Scanner MatrixOps::strassensWrapper(Scanner A, Scanner B, unsigned int crossover
       newNode->matrix = newB;
       newNode->next = m_data;
       m_data = newNode;
-      std::cout << padding << std::endl;
       int * offsetA = A.offset();
       int * offsetB = B.offset();
       for (unsigned int i = 0; i < dim; ++i)

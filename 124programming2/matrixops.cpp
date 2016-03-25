@@ -1,6 +1,7 @@
 // matrixops.cpp
 
 #include "matrixops.h"
+#include <cmath>
 
 MatrixOps::MatrixOps()
   : m_data(NULL)
@@ -74,6 +75,10 @@ Scanner MatrixOps::conventionalMatrixMult(Scanner A, Scanner B, bool outColMajor
       {
         for (unsigned int i = 0; i < dim; i++)
         {
+          std::cout << "Here!" << std::endl;
+          std::cout << A.current() << std::endl;
+          std::cout << B.current() << std::endl;
+          std::cout << "There!" << std::endl;
           newdata[row*dim + col] += A.current() * B.current();
           if (i < dim-1)
           {
@@ -206,11 +211,79 @@ Scanner MatrixOps::subtractMatrices(Scanner A, Scanner B, bool outColMajor)
   return Scanner(newdata, true, dim, dim, dim, dim);
 }
 
+Scanner MatrixOps::strassensWrapper(Scanner A, Scanner B, unsigned int crossover)
+{
+  A.goHome();
+  B.goHome();
+  unsigned int dim = A.getHeight();
+  // calculate padding
+  if (dim > crossover)
+  {
+    unsigned int numDivs = pow(2, ceil((log(dim) - log(crossover)) / log(2)));
+    if (dim % numDivs != 0) 
+    { 
+      unsigned int padding = numDivs - dim % numDivs;
+      int * newA = (int *) malloc(sizeof(int) * (dim + padding) * (dim + padding));
+      node * newNode = (node *) malloc(sizeof(node));
+      newNode->matrix = newA;
+      newNode->next = m_data;
+      m_data = newNode;
+      int * newB = (int *) malloc(sizeof(int) * (dim + padding) * (dim + padding));
+      newNode = (node *) malloc(sizeof(node));
+      newNode->matrix = newB;
+      newNode->next = m_data;
+      m_data = newNode;
+      std::cout << padding << std::endl;
+      int * offsetA = A.offset();
+      int * offsetB = B.offset();
+      for (unsigned int i = 0; i < dim; ++i)
+      {
+        memcpy(newA + i * (dim + padding), offsetA + i * dim, dim * sizeof(int));
+        memset(newA + i * (dim + padding) + dim, 0, padding);
+        memcpy(newB + i * (dim + padding), offsetB + i * dim, dim * sizeof(int));
+        memset(newB + i * (dim + padding) + dim, 0, padding);
+      }
+      for (unsigned int i = 0; i < padding; ++i)
+      {
+        memset(newA + dim * (dim + padding), 0, dim + padding);
+        memset(newB + dim * (dim + padding), 0, dim + padding);
+      }
+      Scanner paddedA = Scanner(newA, A.isRowMajor(), dim + padding, dim + padding, dim + padding, dim + padding);
+      Scanner paddedB = Scanner(newB, B.isRowMajor(), dim + padding, dim + padding, dim + padding, dim + padding);
+      Scanner result = strassens(paddedA, paddedB, crossover);
+      result.goHome();
+      int * newC = (int *) malloc(sizeof(int) * dim * dim);
+      newNode = (node *) malloc(sizeof(node));
+      newNode->matrix = newC;
+      newNode->next = m_data;
+      m_data = newNode;
+      int * offsetC = result.offset();
+      for (unsigned int i = 0; i < dim; ++i)
+      {
+        memcpy(newC + i * dim, offsetC + i * (dim+padding), dim * sizeof(int));
+      }
+      return Scanner(newC, result.isRowMajor(), dim, dim, dim, dim);
+    }
+    else
+    {
+      return strassens(A, B, crossover);
+    }
+  }
+  else
+  {
+    return conventionalMatrixMult(A, B, false);
+  }
+}
+
 Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
 {
   A.goHome();
   B.goHome();
   unsigned int A_height = A.getHeight();
+  if (A_height <= crossover)
+  {
+    return conventionalMatrixMult(A, B, false);
+  }
   unsigned int A_width = A.getWidth();
   unsigned int B_height = B.getHeight();
   unsigned int B_width = B.getWidth();
@@ -218,6 +291,7 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
   unsigned int A_originalWidth = A.getOriginalWidth();
   unsigned int B_originalHeight = B.getOriginalHeight();
   unsigned int B_originalWidth = B.getOriginalWidth();
+
   bool A_type = A.isRowMajor();
   bool B_type = B.isRowMajor();
   int* A_offset = A.offset();
@@ -258,14 +332,6 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
     B12 = Scanner(B_offset + B_originalHeight*B_width/2, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
     B22 = Scanner(B_offset + B_originalHeight*(B_width/2) + B_height/2, B_type, B_originalWidth, B_originalHeight, B_width/2, B_height/2);
   }
-
-  Scanner M1 = Scanner();
-  Scanner M2 = Scanner();
-  Scanner M3 = Scanner();
-  Scanner M4 = Scanner();
-  Scanner M5 = Scanner();
-  Scanner M6 = Scanner();
-  Scanner M7 = Scanner();
   MatrixOps m1 = MatrixOps();
   MatrixOps m2 = MatrixOps();
   MatrixOps m3 = MatrixOps();
@@ -273,26 +339,13 @@ Scanner MatrixOps::strassens(Scanner A, Scanner B, unsigned int crossover)
   MatrixOps m5 = MatrixOps();
   MatrixOps m6 = MatrixOps();
   MatrixOps m7 = MatrixOps();
-  if (A_height <= crossover)
-  {
-    M1 = conventionalMatrixMult(addMatrices(A11, A22, false), addMatrices(B11, B22, true), false);
-    M2 = conventionalMatrixMult(addMatrices(A21, A22, false), B11, false);
-    M3 = conventionalMatrixMult(A11, subtractMatrices(B12, B22, true), false);
-    M4 = conventionalMatrixMult(A22, subtractMatrices(B21, B11, true), false);
-    M5 = conventionalMatrixMult(addMatrices(A11, A12, false), B22, false);
-    M6 = conventionalMatrixMult(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), false);
-    M7 = conventionalMatrixMult(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), false);
-  }
-  else
-  {
-    M1 = m1.strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true), crossover);
-    M2 = m2.strassens(addMatrices(A21, A22, false), B11, crossover);
-    M3 = m3.strassens(A11, subtractMatrices(B12, B22, true), crossover);
-    M4 = m4.strassens(A22, subtractMatrices(B21, B11, true), crossover);
-    M5 = m5.strassens(addMatrices(A11, A12, false), B22, crossover);
-    M6 = m6.strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), crossover);
-    M7 = m7.strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), crossover);
-  }
+  Scanner M1 = m1.strassens(addMatrices(A11, A22, false), addMatrices(B11, B22, true), crossover);
+  Scanner M2 = m2.strassens(addMatrices(A21, A22, false), B11, crossover);
+  Scanner M3 = m3.strassens(A11, subtractMatrices(B12, B22, true), crossover);
+  Scanner M4 = m4.strassens(A22, subtractMatrices(B21, B11, true), crossover);
+  Scanner M5 = m5.strassens(addMatrices(A11, A12, false), B22, crossover);
+  Scanner M6 = m6.strassens(subtractMatrices(A21, A11, false), addMatrices(B11, B12, true), crossover);
+  Scanner M7 = m7.strassens(subtractMatrices(A12, A22, false), addMatrices(B21, B22, true), crossover);
   Scanner C11 = addMatrices(subtractMatrices(addMatrices(M1, M4, false), M5, false), M7, false);
   Scanner C12 = addMatrices(M3, M5, false);
   Scanner C21 = addMatrices(M2, M4, false);

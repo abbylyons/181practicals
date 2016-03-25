@@ -52,9 +52,11 @@ int main (int argc, char *argv[])
 
               // input matrices to work with
               Scanner matrixA = Scanner(dataA, true, dimension, dimension, dimension, dimension);
+              matrixA.print();
               Scanner matrixB = Scanner(dataB, true, dimension, dimension, dimension, dimension);
+              matrixB.print();
               MatrixOps matmath = MatrixOps();
-              Scanner matrixC = matmath.strassens(matrixA, matrixB);
+              Scanner matrixC = matmath.strassensWrapper(matrixA, matrixB);
               std::cout << matrixC.current() << std::endl;
               matrixC.nextInRow();
               for (unsigned int i = 1; i < dimension; i++)
@@ -99,7 +101,7 @@ int main (int argc, char *argv[])
             {
               double runtime = 0;
               clock_t t = clock();
-              matmath.strassens(A, B, crossPoint);
+              matmath.strassensWrapper(A, B, crossPoint);
               matmath.unload();
               runtime = (double) (clock() - t) / CLOCKS_PER_SEC * 1000;
               std::cout << "Crosspoint: " << crossPoint << std::endl;
@@ -114,7 +116,7 @@ int main (int argc, char *argv[])
             std::cout << "Best crossover point: " << bestPoint << std::endl;
             free(dataA);
             free(dataB);
-            return 1;
+            return 0;
           }
           // used for determining average runtime for 3 trials
           case 2:
@@ -145,7 +147,7 @@ int main (int argc, char *argv[])
               {
                 double runtime = 0;
                 clock_t t = clock();
-                matmath.strassens(A, B);
+                matmath.strassensWrapper(A, B);
                 matmath.unload();
                 runtime = (double) (clock() - t) / CLOCKS_PER_SEC * 1000 / 3;
                 averageTime += runtime;
@@ -155,6 +157,34 @@ int main (int argc, char *argv[])
               free(dataA);
               free(dataB);
             }
+            return 0;
+          }
+          case 3:
+          {
+            MatrixOps matmath = MatrixOps();
+            int * dataA = new int[dimension*dimension+1];
+            for (unsigned int i = 0; i < dimension; ++i)
+            {
+              for (unsigned int j = 0; j < dimension; ++j)
+              {
+                dataA[i * dimension + j] = j;
+              }
+            }
+            int * dataB = new int[dimension*dimension+1];
+            for (unsigned int i = 0; i < dimension; ++i)
+            {
+              for (unsigned int j = 0; j < dimension; ++j)
+              {
+                dataB[i * dimension + j] = j;
+              }
+            }
+
+            Scanner A = Scanner(dataA, true, dimension, dimension, dimension, dimension);
+            Scanner B = Scanner(dataB, false, dimension, dimension, dimension, dimension);
+            Scanner C = matmath.strassensWrapper(A, B, 4);
+            C.print();
+            free(dataA);
+            free(dataB);
             return 0;
           }
       }

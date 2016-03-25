@@ -55,12 +55,9 @@ int main (int argc, char *argv[])
 
               // input matrices to work with
               Scanner matrixA = Scanner(dataA, true, dimension, dimension, dimension, dimension);
-              matrixA.print();
               Scanner matrixB = Scanner(dataB, false, dimension, dimension, dimension, dimension);
-              matrixB.print();
               MatrixOps matmath = MatrixOps();
               Scanner matrixC = matmath.strassensWrapper(matrixA, matrixB);
-              matrixC.print();
               std::cout << matrixC.current() << std::endl;
               matrixC.nextInRow();
               for (unsigned int i = 1; i < dimension; i++)

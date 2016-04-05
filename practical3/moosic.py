@@ -1,6 +1,7 @@
 import numpy as np
 import csv
 import math
+from sklearn import linear_model
 
 # Predict via the user-specific median.
 # If the user has no data, use the global median.
@@ -96,6 +97,7 @@ with open(user_file, 'r') as usr_fh:
                 ages[key] = median
 
 to_predict = []
+ids = []
 # Get inputs.
 with open(test_file, 'r') as test_fh:
     test_csv = csv.reader(test_fh, delimiter=',', quotechar='"')
@@ -105,11 +107,18 @@ with open(test_file, 'r') as test_fh:
         id     = row[0]
         user   = row[1]
         artist = row[2]
-    to_predict.append((id, user, artist))
-
+        to_predict.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
+        ids.append(id)
 
 # PREDICT HERE
 preds = {}
+artist_data[artist]
+user_scores[user]
+sexes[user]
+ages[user]
+
+clf = linear_model.Ridge(alpha = .01)
+clf.fit(to_predict)
 
 #
 with open(soln_file, 'w') as soln_fh:

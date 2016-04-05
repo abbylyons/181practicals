@@ -18,10 +18,10 @@ with open(train_file, 'r') as train_fh:
         user   = row[0]
         artist = row[1]
         plays  = row[2]
-    
+
         if not user in train_data:
             train_data[user] = {}
-        
+
         train_data[user][artist] = int(plays)
 
 # Compute the global median and per-user median.
@@ -77,4 +77,3 @@ print(user_scores)
 #             else:
 #                 print "User", id, "not in training data."
 #                 soln_csv.writerow([id, global_median])
-                

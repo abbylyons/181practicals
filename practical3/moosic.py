@@ -107,6 +107,22 @@ with open(test_file, 'r') as test_fh:
         artist = row[2]
     to_predict.append((id, user, artist))
 
+# get fitting data
+fitX = []
+fitY = []
+with open(train_file, 'r') as train_fh:
+    train_csv = csv.reader(train_fh, delimiter=',', quotechar='"')
+    next(train_csv, None)
+    for row in train_csv:
+        user   = row[0]
+        artist = row[1]
+        plays  = row[2]
+
+        fitX.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
+        fitY.append[int(plays)]
+
+
+
 
 # PREDICT HERE
 preds = {}

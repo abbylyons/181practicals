@@ -10,6 +10,8 @@ train_file = 'train.csv'
 test_file  = 'test.csv'
 soln_file  = 'user_median.csv'
 user_file  = 'profiles.csv'
+pred_file  = 'to_predict.csv'
+fit_file   = 'to_fit.csv'
 
 # Load the training data.
 train_data = {}
@@ -32,6 +34,9 @@ with open(train_file, 'r') as train_fh:
         else:
             artist_data[artist] += int(plays)
 
+
+print("LOADED TRAINING DATA")
+
 # Compute the global median and per-user median.
 plays_array  = []
 user_medians = {}
@@ -43,9 +48,13 @@ for user, user_data in train_data.iteritems():
 
     user_medians[user] = np.median(np.array(user_plays))
 
+print("Computed user medians")
+
 # calculate artist scores
 for artist in artist_data:
     artist_data[artist] = np.log(artist_data[artist])
+
+print("computed artist scores")
 
 # log transform the data
 for user, user_data in train_data.iteritems():
@@ -60,6 +69,8 @@ for user, user_data in train_data.iteritems():
 user_scores = {}
 for user, user_data in train_data.iteritems():
     user_scores[user] = user_medians[user] / max_median
+
+print("computed user scores")
 
 sexes = {}
 ages = {}
@@ -96,6 +107,9 @@ with open(user_file, 'r') as usr_fh:
             if value == 99:
                 ages[key] = median
 
+
+print("extracted profile data")
+
 to_predict = []
 ids = []
 # Get inputs.
@@ -109,6 +123,8 @@ with open(test_file, 'r') as test_fh:
         artist = row[2]
         to_predict.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
         ids.append(id)
+
+print("got inputs")
 
 # get fitting data
 fitX = []
@@ -124,16 +140,48 @@ with open(train_file, 'r') as train_fh:
         fitX.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
         fitY.append[int(plays)]
 
+print("got fitting data")
+
+with open(fit_file, 'w') as fit_fh:
+    fit_csv = csv.writer(fit_fh,
+                          delimiter=',',
+                          quotechar='"',
+                          quoting=csv.QUOTE_MINIMAL)
+    fit_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'plays'])
+
+    for i in range(fitX):
+        new_row = fitX[i]
+        new_row.append(fitY[i])
+        fit_csv.writerow(new_row)
+
+print("saved fit data")
+
+with open(pred_file, 'w') as pred_fh:
+    pred_csv = csv.writer(pred_fh,
+                          delimiter=',',
+                          quotechar='"',
+                          quoting=csv.QUOTE_MINIMAL)
+    pred_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'id'])
+
+    for i, row  in enumerate(to_predict):
+        new_row = row
+        new_row.append(ids[i])
+        pred_csv.writerow(new_row)
+
+
+print("saved pred data")
+
 
 # PREDICT HERE
-artist_data[artist]
-user_scores[user]
-sexes[user]
-ages[user]
 
 clf = linear_model.Ridge(alpha = .01)
 clf.fit(fitX, fitY)
+
+print("finished fitting")
+
 preds = clf.predict(to_predict)
+
+print("finished predicting")
 
 #
 with open(soln_file, 'w') as soln_fh:
@@ -143,5 +191,7 @@ with open(soln_file, 'w') as soln_fh:
                           quoting=csv.QUOTE_MINIMAL)
     soln_csv.writerow(['Id', 'plays'])
 
-    for value, i in enumerate(preds):
+    for i, value in enumerate(preds):
         soln_csv.writerow(ids[i], value)
+
+print("All done!")

@@ -110,15 +110,30 @@ with open(test_file, 'r') as test_fh:
         to_predict.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
         ids.append(id)
 
+# get fitting data
+fitX = []
+fitY = []
+with open(train_file, 'r') as train_fh:
+    train_csv = csv.reader(train_fh, delimiter=',', quotechar='"')
+    next(train_csv, None)
+    for row in train_csv:
+        user   = row[0]
+        artist = row[1]
+        plays  = row[2]
+
+        fitX.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
+        fitY.append[int(plays)]
+
+
 # PREDICT HERE
-preds = {}
 artist_data[artist]
 user_scores[user]
 sexes[user]
 ages[user]
 
 clf = linear_model.Ridge(alpha = .01)
-clf.fit(to_predict)
+clf.fit(fitX, fitY)
+preds = clf.predict(to_predict)
 
 #
 with open(soln_file, 'w') as soln_fh:
@@ -128,5 +143,5 @@ with open(soln_file, 'w') as soln_fh:
                           quoting=csv.QUOTE_MINIMAL)
     soln_csv.writerow(['Id', 'plays'])
 
-    for key, value in preds:
-        soln_csv.writerow([key, value)
+    for value, i in enumerate(preds):
+        soln_csv.writerow(ids[i], value)

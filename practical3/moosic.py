@@ -2,13 +2,14 @@ import numpy as np
 import csv
 import math
 from sklearn import linear_model
+from sklearn.ensemble import RandomForestRegressor
 
 # Predict via the user-specific median.
 # If the user has no data, use the global median.
 
 train_file = 'train.csv'
 test_file  = 'test.csv'
-soln_file  = 'user_median.csv'
+soln_file  = 'out.csv'
 user_file  = 'profiles.csv'
 pred_file  = 'to_predict.csv'
 fit_file   = 'to_fit.csv'
@@ -101,11 +102,10 @@ with open(user_file, 'r') as usr_fh:
         else:
             ages[user] = 99
 
-        median = np.median(np.array(all_ages))
-
-        for key, value in ages.iteritems():
-            if value == 99:
-                ages[key] = median
+    med = np.median(np.array(all_ages))
+    for key, value in ages.iteritems():
+        if value == 99:
+            ages[key] = med
 
 
 print("extracted profile data")
@@ -138,50 +138,48 @@ with open(train_file, 'r') as train_fh:
         plays  = row[2]
 
         fitX.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
-        fitY.append[int(plays)]
+        fitY.append(int(plays))
 
 print("got fitting data")
 
-with open(fit_file, 'w') as fit_fh:
-    fit_csv = csv.writer(fit_fh,
-                          delimiter=',',
-                          quotechar='"',
-                          quoting=csv.QUOTE_MINIMAL)
-    fit_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'plays'])
-
-    for i in range(fitX):
-        new_row = fitX[i]
-        new_row.append(fitY[i])
-        fit_csv.writerow(new_row)
-
-print("saved fit data")
-
-with open(pred_file, 'w') as pred_fh:
-    pred_csv = csv.writer(pred_fh,
-                          delimiter=',',
-                          quotechar='"',
-                          quoting=csv.QUOTE_MINIMAL)
-    pred_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'id'])
-
-    for i, row  in enumerate(to_predict):
-        new_row = row
-        new_row.append(ids[i])
-        pred_csv.writerow(new_row)
-
-
-print("saved pred data")
-
-
 # PREDICT HERE
 
-clf = linear_model.Ridge(alpha = .01)
+clf = RandomForestRegressor()
 clf.fit(fitX, fitY)
 
-print("finished fitting")
-
-preds = clf.predict(to_predict)
+testX=np.array(to_predict,dtype=float)
+preds = clf.predict(testX)
 
 print("finished predicting")
+
+# with open(fit_file, 'w') as fit_fh:
+#     fit_csv = csv.writer(fit_fh,
+#                           delimiter=',',
+#                           quotechar='"',
+#                           quoting=csv.QUOTE_MINIMAL)
+#     fit_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'plays'])
+#
+#     for i in range(len(fitX)):
+#         new_row = fitX[i]
+#         new_row.append(fitY[i])
+#         fit_csv.writerow(new_row)
+#
+# print("saved fit data")
+#
+# with open(pred_file, 'w') as pred_fh:
+#     pred_csv = csv.writer(pred_fh,
+#                           delimiter=',',
+#                           quotechar='"',
+#                           quoting=csv.QUOTE_MINIMAL)
+#     pred_csv.writerow(['Artist Score', 'user_score', 'sex', 'age', 'id'])
+#
+#     for i, row  in enumerate(to_predict):
+#         new_row = row
+#         new_row.append(ids[i])
+#         pred_csv.writerow(new_row)
+#
+#
+# print("saved pred data")
 
 #
 with open(soln_file, 'w') as soln_fh:
@@ -192,6 +190,6 @@ with open(soln_file, 'w') as soln_fh:
     soln_csv.writerow(['Id', 'plays'])
 
     for i, value in enumerate(preds):
-        soln_csv.writerow(ids[i], value)
+        soln_csv.writerow([ids[i], value])
 
 print("All done!")

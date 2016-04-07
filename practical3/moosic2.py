@@ -15,6 +15,7 @@ def MAE(X_hat, X):
 P = {}
 S = {}
 N = 0
+norm = 0.05 # normalization factor
 
 def p_a_grad(artist):
     grad = 0
@@ -90,10 +91,12 @@ while cnt < 10 or error > 100:
     error = MAE(X_hats, X)
     print("Error: " + error)
 
-    # TODO
-    # Coordinate decent here using p_a_grad(artist) and s_u_grad(user)
-    # Have to update P and S.
-    # TODO
+    if cnt % 2 == 0:
+        for artist, value in P.iteritems():
+            P[artist] -= p_a_grad(artist) * norm
+    else:
+        for user, value in S.iteritems():
+            S[user] -= s_u_grad(user) * norm
 
     cnt += 1
 

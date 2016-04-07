@@ -2,17 +2,20 @@ import numpy as np
 import csv
 import math
 from sklearn import linear_model
+from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestRegressor
 
 # Predict via the user-specific median.
 # If the user has no data, use the global median.
 
-train_file = 'train.csv'
-test_file  = 'test.csv'
-soln_file  = 'out.csv'
-user_file  = 'profiles.csv'
-pred_file  = 'to_predict.csv'
-fit_file   = 'to_fit.csv'
+
+train_file  = 'train.csv'
+test_file   = 'test.csv'
+soln_file   = 'out.csv'
+user_file   = 'profiles.csv'
+pred_file   = 'to_predict.csv'
+fit_file    = 'to_fit.csv'
+artist_file = 'artists.csv'
 
 # Load the training data.
 train_data = {}
@@ -37,6 +40,39 @@ with open(train_file, 'r') as train_fh:
 
 
 print("LOADED TRAINING DATA")
+
+artists_idx = {}
+cnt = 0
+with open(artist_file, 'r') as artist_fh:
+    artist_csv = csv.reader(artist_fh, delimiter=',', quotechar='"')
+    next(artist_csv, None)
+    for row in artist_csv:
+        artist_id  = row[0]
+
+        artists_idx[artist_id] = cnt
+        cnt += 1
+
+
+artist_matrix = []
+user_cnt = 0
+user_idx = {}
+for user, artist_dict in train_data.iteritems():
+    user_idx[user] = user_cnt
+    user_cnt += 1
+    new_row = [0 for _ in range(cnt)]
+    for artist, plays in artist_dict.iteritems():
+        new_row[artists_idx[artist]] = plays
+    artist_matrix.append(new_row)
+
+
+print("Genertated matrix")
+print(len(artist_matrix))
+print(len(artist_matrix[0]))
+
+clf = KMeans(n_clusters = 10, max_iter = 10)
+clsters = clf.fit_predict(artist_matrix)
+
+print("Clustered")
 
 # Compute the global median and per-user median.
 plays_array  = []
@@ -121,7 +157,7 @@ with open(test_file, 'r') as test_fh:
         id     = row[0]
         user   = row[1]
         artist = row[2]
-        to_predict.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
+        to_predict.append([clsters[user_idx[user]], artist_data[artist], user_scores[user], sexes[user], ages[user]])
         ids.append(id)
 
 print("got inputs")
@@ -137,7 +173,7 @@ with open(train_file, 'r') as train_fh:
         artist = row[1]
         plays  = row[2]
 
-        fitX.append([artist_data[artist], user_scores[user], sexes[user], ages[user]])
+        fitX.append([clsters[user_idx[user]], artist_data[artist], user_scores[user], sexes[user], ages[user]])
         fitY.append(int(plays))
 
 print("got fitting data")

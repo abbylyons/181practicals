@@ -6,49 +6,60 @@ import math
 # Predict via the user-specific median.
 # If the user has no data, use the global median.
 
-def MAE(X_hat, X):
+def MAE(X_hat, X, TOT):
     err = 0
     for i, x in enumerate(X):
         err += np.abs(X_hat[i] - x)
-    return float(err/N)
+    return float(err/TOT)
 
 P = {}
 S = {}
 N = 0.0
-norm = 0.1 # normalization factor
-eps = 0.1
+Q = 0.0
+norm = 0.4 # normalization factor
+eps = 0.001
 
 def pred(user, artist):
-    return S[user]* P[artist]
+    if user in S and artist in P:
+        return S[user]* P[artist]
+    else:
+        return global_median
 
 train_file  = 'train.csv'
 test_file   = 'test.csv'
-soln_file   = 'out.csv'
+soln_file   = '3_out.csv'
 
 # Load the training data.
 user_data = {}
+valid_data = {}
 artist_data = {}
 i = 0
 with open(train_file, 'r') as train_fh:
     train_csv = csv.reader(train_fh, delimiter=',', quotechar='"')
     next(train_csv, None)
     for row in train_csv:
-        if i == 100000:
-            break
         i += 1
         user   = row[0]
         artist = row[1]
         plays  = row[2]
 
-        P[artist] = 4
-        S[user] = 4
-        B[user] = 20
-        N += 1
+        if i < 3500000:
 
-        if not user in user_data:
-            user_data[user] = {}
+            P[artist] = 10
+            S[user] = 10
+            N += 1
 
-        user_data[user][artist] = int(plays)
+            if not user in user_data:
+                user_data[user] = {}
+
+            user_data[user][artist] = int(plays)
+        else:
+            Q += 1
+            if not user in valid_data:
+                valid_data[user] = {}
+
+            valid_data[user][artist] = int(plays)
+
 
 
 print("LOADED TRAINING DATA")
@@ -69,8 +80,18 @@ print("Computed the global median.")
 
 cnt = 0
 error = float('inf')
+valid_error = float('inf')
 hi_low = []
-while cnt < 100 and error > 0:
+while cnt < 1000 and error > 0:
+    if valid_error < 144:
+        norm = 0.1
+    if valid_error < 137.8:
+        norm = 0.025
+    if valid_error < 137:
+        norm = 0.001
+    if valid_error < 136:
+        norm = 0.0005
+    hi_low = []
     # Calculate Xhats
     X_hats = []
     X = []
@@ -84,17 +105,25 @@ while cnt < 100 and error > 0:
             else:
                 hi_low.append(1)
 
-    new_error = MAE(X_hats, X)
-    if new_error - error > eps:
+    Y_hats = []
+    Y = []
+    for user, artistDict in valid_data.iteritems():
+        for artist, plays in artistDict.iteritems():
+            prediction = pred(user, artist)
+            Y_hats.append(prediction)
+            Y.append(plays)
+    new_error = MAE(Y_hats, Y, Q)
+    error = MAE(X_hats, X, N)
+    if new_error - valid_error > eps:
          break
-    error = new_error
-    print("Error: " + str(error))
+    valid_error = new_error
+    print("testing Error: " + str(error))
+    print("valid Error: " + str(valid_error))
     index = 0
     P_grads = {}
     S_grads = {}
     P_counts = {}
     S_counts = {}
-    B_grads = {}
     for user, artistDict in user_data.iteritems():
         for artist, plays in artistDict.iteritems():
             if cnt % 2 == 0:
@@ -117,7 +146,6 @@ while cnt < 100 and error > 0:
                 if user not in S_counts:
                     S_counts[user] = 0
                 S_counts[user] += 1
-
             index += 1
 
     if cnt % 2 == 0:
@@ -151,7 +179,11 @@ with open(test_file, 'r') as test_fh:
             artist = row[2]
 
             if user in S:
-                soln_csv.writerow([id, pred(user, artist)])
+                prd = pred(user, artist)
+                if prd > 0:
+                    soln_csv.writerow([id, prd])
+                else:
+                    soln_csv.writerow([id, 0])
             else:
                 #print "User", id, "not in training data."
                 soln_csv.writerow([id, global_median])

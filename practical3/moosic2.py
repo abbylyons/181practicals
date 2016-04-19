@@ -42,7 +42,6 @@ with open(train_file, 'r') as train_fh:
 
         P[artist] = 4
         S[user] = 4
-        B[user] = 20
         N += 1
 
         if not user in user_data:
@@ -94,7 +93,6 @@ while cnt < 100 and error > 0:
     S_grads = {}
     P_counts = {}
     S_counts = {}
-    B_grads = {}
     for user, artistDict in user_data.iteritems():
         for artist, plays in artistDict.iteritems():
             if cnt % 2 == 0:

@@ -16,12 +16,13 @@ class Learner(object):
         self.last_action = None
         self.last_reward = None
         self.impulse = 15
-        # [dist][tree_bot][vel][monkey_bot][action]
-        self.Qs = np.array([[[[[0 for _ in range(2)] for _ in range(10)] for _ in range(10)] for _ in range(10)] for _ in range(10)])
-        self.gamma = .5
+        # [vertical_dist][horz_dist][grav][action]
+        self.Qs = np.array([[[[0 for _ in range(2)] for _ in range(2)] for _ in range(10)] for _ in range(12)])
+        self.gamma = .7
         self.grav = None
         self.horz_speed = None
         self.first_round = True
+        self.tree_gap = None
 
     def reset(self):
         self.last_state  = None
@@ -42,32 +43,40 @@ class Learner(object):
         # You'll need to select and action and return it.
         # Return 0 to swing and 1 to jump.
 
-        # figure out gravity and horisontal speed
+        # figure out gravity tree gap
         if self.first_round:
             new_action = 0
             new_state = state
             self.first_round = False
+            self.tree_gap = state['tree']['top']-state['tree']['bot']
         elif self.horz_speed is None:
             self.horz_speed = self.last_state['tree']['dist'] - state['tree']['dist']
-            self.gravity = self.last_state['monkey']['vel'] - state['monkey']['vel']
+            if self.last_state['monkey']['vel'] - state['monkey']['vel'] == 1:
+                self.gravity = 0
+            else:
+                self.gravity = 0
             new_action = 0
             new_state = state
         else:
             #update Q values for the last iteration
             # figure out the previous bins:
-            prev_dist = round((self.last_state['tree']['dist'] + 50)/200)
-            prev_tree_bot = round((self.last_state['tree']['bot'])/40)
-            prev_vel = round((self.last_state['monkey']['vel']+50)/20)
-            prev_monkey_bot = round((self.last_state['monkey']['bot'])/200)
+            prev_v_dist = (self.last_state['tree']['top'] - self.last_state['monkey']['top']+ self.tree_gap)/50
+            prev_horz_dist = (self.last_state['tree']['dist']+150)/100
             # figure out the bins:
-            dist = round((state['tree']['dist'] + 50)/50)
-            tree_bot = round((state['tree']['bot'])/20)
-            vel = round((state['monkey']['vel']+50)/10)
-            monkey_bot = round((state['monkey']['bot'])/50)
-            self.Qs[prev_dist][prev_tree_bot][prev_vel][prev_monkey_bot][self.last_action] = self.last_reward + self.gamma * max(self.Qs[dist][tree_bot][vel][monkey_bot])
-            print(self.Qs[prev_dist][prev_tree_bot][prev_vel][prev_monkey_bot][self.last_action])
-            new_action = self.Qs[dist][tree_bot][vel][monkey_bot].argmax()
+            v_dist = (state['tree']['top'] - state['monkey']['top']+self.tree_gap)/50
+            horz_dist = (state['tree']['dist']+150)/100
+            self.Qs[prev_v_dist][prev_horz_dist][self.gravity][self.last_action] = self.last_reward + self.gamma * max(self.Qs[v_dist][horz_dist][0])
+            action0Q = self.Qs[v_dist][horz_dist][0][0]
+            action1Q = self.Qs[v_dist][horz_dist][0][1]
 
+
+            # this can be better
+            if action0Q == 0:
+                new_action = 0
+            elif action1Q == 0:
+                new_action = 1;
+            else:
+                new_action = self.Qs[v_dist][horz_dist][self.gravity].argmax()
             new_state  = state
 
         self.last_action = new_action

@@ -1,7 +1,6 @@
 # Imports.
 import numpy as np
 import numpy.random as npr
-import neural_net.data as nn
 import random
 import csv
 
@@ -126,19 +125,20 @@ def run_games(learner, hist, iters = 100, t_len = 100):
 if __name__ == '__main__':
 
 	# Select agent.
-	agent = Learner()
+    agent = Learner()
 
 	# Empty list to save history.
-	hist = []
+    hist = []
 
 	# Run games.
-	run_games(agent, hist, 90, 1)
+    run_games(agent, hist, 90, 1)
 
     # for each elt in hist, write into CSV file i + 1, hist[i]
+
     with open('results.csv', 'wb') as csvfile:
         writ = csv.writer(csvfile, delimiter=',')
         for i, item in enumerate(hist):
             writ.writerow([i + 1] + [item])
 
 	# Save history.
-	np.save('hist',np.array(hist))
+    np.save('hist',np.array(hist))

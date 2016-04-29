@@ -2,6 +2,7 @@
 import numpy as np
 import numpy.random as npr
 import random
+import csv
 
 from SwingyMonkey import SwingyMonkey
 
@@ -75,14 +76,14 @@ class Learner(object):
 
             # this can be better
             new_action = self.Qs[v_dist][horz_dist][self.gravity].argmax()
-            if self.iters < 4000:
-                if action0Q == 0:
-                    new_action = 0
-                elif action0Q == 0:
+            if self.iters < 5000:
+                if action1Q == 0:
                     new_action = 1
+                elif action0Q == 0:
+                    new_action = 0
             new_state  = state
 
-        if self.iters > 100000:
+        if self.iters > 150000:
             new_action = 1
 
         self.last_action = new_action
@@ -132,11 +133,11 @@ if __name__ == '__main__':
     hist = []
 
 	# Run games.
-    run_games(agent, hist, 90, 1)
+    run_games(agent, hist, 150, 1)
 
     # for each elt in hist, write into CSV file i + 1, hist[i]
 
-    with open('results.csv', 'wb') as csvfile:
+    with open('results_random.csv', 'wb') as csvfile:
         writ = csv.writer(csvfile, delimiter=',')
         for i, item in enumerate(hist):
             writ.writerow([i + 1] + [item])

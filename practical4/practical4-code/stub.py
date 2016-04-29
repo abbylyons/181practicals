@@ -76,17 +76,19 @@ class Learner(object):
 
             # this can be better
             new_action = self.Qs[v_dist][horz_dist][self.gravity].argmax()
-            if self.iters < 5000:
+            if self.iters < 4000:
                 if action0Q == 0:
                     new_action = 0
                 elif action0Q == 0:
                     new_action = 1
             new_state  = state
 
+        if self.iters > 10000:
+            new_action = 1
+
         self.last_action = new_action
         self.last_state  = new_state
         self.iters += 1
-        print(self.iters)
 
         return self.last_action
 
@@ -131,7 +133,7 @@ if __name__ == '__main__':
 	hist = []
 
 	# Run games.
-	run_games(agent, hist, 90, 1)
+	run_games(agent, hist, 100, 1)
 
 	# Save history.
 	np.save('hist',np.array(hist))

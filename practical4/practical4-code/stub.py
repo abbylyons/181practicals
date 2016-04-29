@@ -24,6 +24,7 @@ class Learner(object):
         self.horz_speed = None
         self.first_round = True
         self.tree_gap = None
+        self.monkey_height = None
         self.iters = 1
 
     def reset(self):
@@ -51,47 +52,41 @@ class Learner(object):
             new_state = state
             self.first_round = False
             self.tree_gap = state['tree']['top']-state['tree']['bot']
+            self.monkey_height = state['monkey']['top']-state['monkey']['bot']
         elif self.horz_speed is None:
             self.horz_speed = self.last_state['tree']['dist'] - state['tree']['dist']
             if self.last_state['monkey']['vel'] - state['monkey']['vel'] == 1:
                 self.gravity = 0
             else:
-                self.gravity = 0
+                self.gravity = 1
             new_action = 0
             new_state = state
         else:
             #update Q values for the last iteration
             # figure out the previous bins:
-            prev_v_dist = (self.last_state['tree']['top'] - self.last_state['monkey']['top']+ self.tree_gap)/31
+            prev_v_dist = (self.last_state['tree']['top']- 1/2*self.tree_gap - self.last_state['monkey']['top'] + 1/2*self.monkey_height +272)/30
             prev_horz_dist = (self.last_state['tree']['dist']+150)/50
             # figure out the bins:
-            v_dist = (state['tree']['top'] - state['monkey']['top']+self.tree_gap)/31
+            v_dist = (state['tree']['top']- 1/2*self.tree_gap - state['monkey']['top'] + 1/2*self.monkey_height +272)/30
             horz_dist = (state['tree']['dist']+150)/50
-            self.Qs[prev_v_dist][prev_horz_dist][self.gravity][self.last_action] = self.last_reward + self.gamma * max(self.Qs[v_dist][horz_dist][0])
-            action0Q = self.Qs[v_dist][horz_dist][0][0]
-            action1Q = self.Qs[v_dist][horz_dist][0][1]
+            self.Qs[prev_v_dist][prev_horz_dist][self.gravity][self.last_action] = self.last_reward + self.gamma * max(self.Qs[v_dist][horz_dist][self.gravity])
+            action0Q = self.Qs[v_dist][horz_dist][self.gravity][0]
+            action1Q = self.Qs[v_dist][horz_dist][self.gravity][1]
 
 
             # this can be better
-            prob = np.exp(self.iters*action1Q/100)
-            prob = prob/(prob+np.exp(self.iters*action0Q/100))
-            if random.random() > prob:
-                new_action = 0
-            else:
-                new_action = 1
-
-            # if action0Q == 0:
-            #     new_action = 0
-            # elif action0Q == 0:
-            #     new_action = 1
-            # else:
-            #     new_action = self.Qs[v_dist][horz_dist][0].argmax()
-
+            new_action = self.Qs[v_dist][horz_dist][self.gravity].argmax()
+            if self.iters < 5000:
+                if action0Q == 0:
+                    new_action = 0
+                elif action0Q == 0:
+                    new_action = 1
             new_state  = state
 
         self.last_action = new_action
         self.last_state  = new_state
         self.iters += 1
+        print(self.iters)
 
         return self.last_action
 
@@ -136,7 +131,7 @@ if __name__ == '__main__':
 	hist = []
 
 	# Run games.
-	run_games(agent, hist, 1000, 10)
+	run_games(agent, hist, 90, 1)
 
 	# Save history.
 	np.save('hist',np.array(hist))

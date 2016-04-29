@@ -3,6 +3,7 @@ import numpy as np
 import numpy.random as npr
 import neural_net.data as nn
 import random
+import csv
 
 from SwingyMonkey import SwingyMonkey
 
@@ -132,6 +133,12 @@ if __name__ == '__main__':
 
 	# Run games.
 	run_games(agent, hist, 90, 1)
+
+    # for each elt in hist, write into CSV file i + 1, hist[i]
+    with open('results.csv', 'wb') as csvfile:
+        writ = csv.writer(csvfile, delimiter=',')
+        for i, item in enumerate(hist):
+            writ.writerow([i + 1] + [item])
 
 	# Save history.
 	np.save('hist',np.array(hist))
